@@ -1,0 +1,42 @@
+{
+	"name": "tomzx/php-semver-checker-git",
+	"description": "PHP Composer Template",
+	"type": "library",
+	"keywords": [
+		"semantic versioning",
+		"semver",
+		"checker"
+	],
+	"homepage": "https://github.com/tomzx/php-semver-checker-git",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tom Rochette",
+			"email": "tom@tomrochette.com",
+			"homepage": "http://www.tomrochette.com"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/tomzx/php-semver-checker-git/issues"
+	},
+	"require": {
+		"php": ">=5.4.0",
+		"symfony/console": "2.7.*@dev",
+		"tomzx/php-semver-checker": "0.1.*@dev",
+		"teqneers/php-stream-wrapper-for-git": "1.*",
+		"klaussilveira/gitter": "~0.3"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4"
+	},
+	"autoload": {
+		"psr-4": {
+			"PHPSemVerCheckerGit\\": "src/PHPSemVerCheckerGit"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "0.1-dev"
+		}
+	}
+}
