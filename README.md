@@ -16,22 +16,23 @@ The command line utility will use an existing `git` repository to compare to cha
 
 ```bash
 # arguments are: repository-directory before-commit/branch/tag after-commit/branch/tag before-source after-source
-php bin/php-semver-checker-git compare laravel-framework v4.2.15 v4.2.16 laravel-framework/src laravel-framework/src
+php bin/php-semver-checker-git compare factory-muffin v1.6.4 v2.0.0 factory-muffin/src factory-muffin/src
 
 Suggested semantic versioning change: MAJOR
 
 CLASS
-LEVEL	LOCATION	REASON
-MAJOR	src/Illuminate/Database/Eloquent/Model.php#2550 Illuminate/Database/Eloquent/Model::getMutatorMethod	Method has been removed.
-PATCH	src/Illuminate/Database/Eloquent/Model.php#243 __construct	Method implementation changed.
-PATCH	src/Illuminate/Database/Eloquent/Model.php#322 addGlobalScope	Method implementation changed.
-PATCH	src/Illuminate/Database/Eloquent/Model.php#333 hasGlobalScope	Method implementation changed.
-PATCH	src/Illuminate/Database/Eloquent/Model.php#344 getGlobalScope	Method implementation changed.
-PATCH	src/Illuminate/Database/Eloquent/Model.php#357 getGlobalScopes	Method implementation changed.
+LEVEL LOCATION  REASON
+MAJOR src/Zizaco/FactoryMuff/Facade/FactoryMuff.php#8 Zizaco\FactoryMuff\Facade\FactoryMuff Class was removed.
+MAJOR src/Zizaco/FactoryMuff/FactoryMuff.php#13 Zizaco\FactoryMuff\FactoryMuff  Class was removed.
+MAJOR src/Zizaco/FactoryMuff/Kind.php#7 Zizaco\FactoryMuff\Kind Class was removed.
+[...]
+MINOR src/Exceptions/DeleteFailedException.php#17 League\FactoryMuffin\Exceptions\DeleteFailedException Class was added.
+MINOR src/Exceptions/DeleteMethodNotFoundException.php#17 League\FactoryMuffin\Exceptions\DeleteMethodNotFoundException Class was added.
+MINOR src/Exceptions/DeletingFailedException.php#21 League\FactoryMuffin\Exceptions\DeletingFailedException Class was added.
 [... cut for brievity ...]
 
 FUNCTION
-LEVEL	LOCATION	REASON
+LEVEL LOCATION  REASON
 ```
 
 ## License
