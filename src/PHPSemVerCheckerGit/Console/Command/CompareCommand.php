@@ -4,6 +4,7 @@ namespace PHPSemVerCheckerGit\Console\Command;
 
 use File_Iterator_Facade;
 use Gitter\Client;
+use PHPSemVerChecker\Analyzer\Analyzer;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use Symfony\Component\Console\Command\Command;
@@ -73,10 +74,14 @@ class CompareCommand extends Command {
 
 		$progress->clear();
 
-		$beforeRegistry = $beforeScanner->getRegistry();
-		$afterRegistry = $afterScanner->getRegistry();
+		$registryBefore = $beforeScanner->getRegistry();
+		$registryAfter = $afterScanner->getRegistry();
 
-		$reporter = new Reporter();
-		$reporter->output($beforeRegistry, $afterRegistry, $output);
+		$analyzer = new Analyzer();
+		$report = $analyzer->analyze($registryBefore, $registryAfter);
+
+
+		$reporter = new Reporter($report);
+		$reporter->output($output);
 	}
 }
