@@ -7,6 +7,7 @@ use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
+use PHPSemVerCheckerGit\Filter\SourceFilter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,13 +31,16 @@ class CompareCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		$startTime = microtime(true);
+
 		$target = $input->getArgument('target');
-		$before = $input->getArgument('before');
-		$after = $input->getArgument('after');
-		$beforeFiles = $input->getArgument('source-before');
-		$afterFiles = $input->getArgument('source-after');
+		$commitBefore = $input->getArgument('before');
+		$commitAfter = $input->getArgument('after');
+		$sourceBefore = $input->getArgument('source-before');
+		$sourceAfter = $input->getArgument('source-after');
 
 		$fileIterator = new File_Iterator_Facade;
+		$sourceFilter = new SourceFilter();
 		$beforeScanner = new Scanner();
 		$afterScanner = new Scanner();
 
@@ -44,24 +48,33 @@ class CompareCommand extends Command {
 
 		$repository = $client->getRepository($target);
 
+		$modifiedFiles = $repository->getModifiedFiles($commitBefore, $commitAfter);
+		$modifiedFiles = array_filter($modifiedFiles, function ($modifiedFile) {
+			return substr($modifiedFile, -4) === '.php';
+		});
+
 		$initialBranch = $repository->getCurrentBranch();
 
-		$repository->checkout($before . ' --');
+		$repository->checkout($commitBefore . ' --');
 
-		$beforeFiles = $fileIterator->getFilesAsArray($beforeFiles, '.php');
-		$progress = new ProgressBar($output, count($beforeFiles));
-		foreach ($beforeFiles as $file) {
+		$sourceBefore = $fileIterator->getFilesAsArray($sourceBefore, '.php');
+		$sourceBeforeMatchedCount = count($sourceBefore);
+		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
+		$progress = new ProgressBar($output, count($sourceBefore));
+		foreach ($sourceBefore as $file) {
 			$beforeScanner->scan($file);
 			$progress->advance();
 		}
 
 		$progress->clear();
 
-		$repository->checkout($after . ' --');
+		$repository->checkout($commitAfter . ' --');
 
-		$afterFiles = $fileIterator->getFilesAsArray($afterFiles, '.php');
-		$progress = new ProgressBar($output, count($afterFiles));
-		foreach ($afterFiles as $file) {
+		$sourceAfter = $fileIterator->getFilesAsArray($sourceAfter, '.php');
+		$sourceAfterMatchedCount = count($sourceAfter);
+		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
+		$progress = new ProgressBar($output, count($sourceAfter));
+		foreach ($sourceAfter as $file) {
 			$afterScanner->scan($file);
 			$progress->advance();
 		}
@@ -82,6 +95,12 @@ class CompareCommand extends Command {
 
 
 		$reporter = new Reporter($report);
+		$reporter->setFullPath(true);
 		$reporter->output($output);
+
+		$duration = microtime(true) - $startTime;
+		$output->writeln('');
+		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' ('.$sourceBeforeMatchedCount.' unfiltered), After: ' . count($sourceAfter) . ' ('.$sourceAfterMatchedCount.'  unfiltered)');
+		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
 	}
 }
