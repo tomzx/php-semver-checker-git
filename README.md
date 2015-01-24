@@ -12,6 +12,22 @@ The command line utility will use an existing `git` repository to compare to cha
 
 **Note** It is strongly suggested you do not run this directly on any repository you do not want to lose. Make a copy of it beforehand and run `php-semver-checker-git` on that copy instead.
 
+## Getting started
+
+1. Install `php-semver-checker-git` through composer, either globally or locally:
+
+Locally
+```bash
+php composer require --dev tomzx/php-semver-checker-git
+```
+
+Globally
+```bash
+php composer global require tomzx/php-semver-checker-git
+```
+
+See the example section for examples of how to use the tool.
+
 ## Example
 
 ```bash
