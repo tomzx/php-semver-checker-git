@@ -10,4 +10,10 @@ before_script:
     - composer self-update
     - composer update
 
-script: php vendor/bin/phpunit
+script:
+    - php vendor/bin/phpunit
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover log/coverage.xml
+    - php bin/php-semver-checker-git suggest src src -vvv
