@@ -8,18 +8,19 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 
 class Application extends SymfonyApplication {
 
-	private static $VERSION = '0.1';
+	const VERSION = '@package_version@';
 
-	private static $logo = '    ____  ______   _______
-   / __ \/ ___/ | / / ___/
-  / /_/ (__  )| |/ / /__
- / .___/____/ |___/\___/
-/_/
+	private static $logo = '                                 _ __
+    ____  ______   ___________ _/_/ /_
+   / __ \/ ___/ | / / ___/ __ `/ / __/
+  / /_/ /__  /| |/ / /__/ /_/ / / /_
+ / .___/____/ |___/\___/\__, /_/\__/
+/_/                    /____/
 ';
 
 	public function __construct()
 	{
-		parent::__construct('PHP Semantic Versioning Checker GIT by Tom Rochette', static::$VERSION);
+		parent::__construct('PHP Semantic Versioning Checker GIT by Tom Rochette', self::VERSION);
 	}
 
 	public function getHelp()
