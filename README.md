@@ -30,26 +30,21 @@ See the example section for examples of how to use the tool.
 
 ## Example
 
+### Compare two commits (without semantic versioning)
+
 ```bash
-# arguments are: repository-directory before-commit/branch/tag after-commit/branch/tag before-source after-source
-php bin/php-semver-checker-git compare factory-muffin v1.6.4 v2.0.0 factory-muffin/src factory-muffin/src
-
-Suggested semantic versioning change: MAJOR
-
-CLASS
-LEVEL LOCATION  REASON
-MAJOR src/Zizaco/FactoryMuff/Facade/FactoryMuff.php#8 Zizaco\FactoryMuff\Facade\FactoryMuff Class was removed.
-MAJOR src/Zizaco/FactoryMuff/FactoryMuff.php#13 Zizaco\FactoryMuff\FactoryMuff  Class was removed.
-MAJOR src/Zizaco/FactoryMuff/Kind.php#7 Zizaco\FactoryMuff\Kind Class was removed.
-[...]
-MINOR src/Exceptions/DeleteFailedException.php#17 League\FactoryMuffin\Exceptions\DeleteFailedException Class was added.
-MINOR src/Exceptions/DeleteMethodNotFoundException.php#17 League\FactoryMuffin\Exceptions\DeleteMethodNotFoundException Class was added.
-MINOR src/Exceptions/DeletingFailedException.php#21 League\FactoryMuffin\Exceptions\DeletingFailedException Class was added.
-[... cut for brievity ...]
-
-FUNCTION
-LEVEL LOCATION  REASON
+# arguments are: before-commit/branch/tag after-commit/branch/tag before-source after-source
+php bin/php-semver-checker-git compare v1.6.4 v2.0.0 src src
 ```
+
+### Compare HEAD against your latest semantic version tag
+
+```bash
+# arguments are: before-source after-source
+php bin/php-semver-checker-git suggest src src --allow-detached
+```
+
+Note: `--allow-detached` is very useful when you are running this command on [`travis-ci`](https://travis-ci.org) or any other continuous integration provider. It is necessary when a checkout is done on a particular commit, which makes `HEAD` become `detached`. If this option is not passed to the command, it will abort. This is done because it is impossible to revert the original `detached` branch when the `suggest` command completes.
 
 ## License
 
