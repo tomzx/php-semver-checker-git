@@ -34,6 +34,8 @@ class SuggestCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		$startTime = microtime(true);
+
 		$target = getcwd();
 		$sourceBefore = $input->getArgument('source-before');
 		$sourceAfter = $input->getArgument('source-after');
@@ -139,6 +141,11 @@ class SuggestCommand extends Command
 		$output->writeln('');
 		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
 		$output->writeln('<info>Suggested semantic version: ' . $newTag . '</info>');
+
+		$duration = microtime(true) - $startTime;
+		$output->writeln('');
+		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' ('.$sourceBeforeMatchedCount.' unfiltered), After: ' . count($sourceAfter) . ' ('.$sourceAfterMatchedCount.'  unfiltered)');
+		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
 	}
 
 	protected function findLatestTag(Repository $repository)
