@@ -23,7 +23,6 @@ class CompareCommand extends Command {
 			->setName('compare')
 			->setDescription('Compare a set of files to determine what semantic versioning change needs to be done')
 			->setDefinition([
-				new InputArgument('target', InputArgument::REQUIRED, 'Directory where you git repository is located (ex my-test)'),
 				new InputArgument('before', InputArgument::REQUIRED, 'A branch/tag/commit to check'),
 				new InputArgument('after', InputArgument::REQUIRED, 'A branch/tag/commit to against'),
 				new InputArgument('source-before', InputArgument::REQUIRED, 'A directory to check (ex my-test/src)'),
@@ -36,7 +35,7 @@ class CompareCommand extends Command {
 	{
 		$startTime = microtime(true);
 
-		$target = $input->getArgument('target');
+		$target = getcwd();
 		$commitBefore = $input->getArgument('before');
 		$commitAfter = $input->getArgument('after');
 		$sourceBefore = $input->getArgument('source-before');
