@@ -5,6 +5,7 @@ namespace PHPSemVerCheckerGit\Console\Command;
 use File_Iterator_Facade;
 use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
+use PHPSemVerChecker\Reporter\JsonReporter;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CompareCommand extends Command {
@@ -26,6 +28,7 @@ class CompareCommand extends Command {
 				new InputArgument('after', InputArgument::REQUIRED, 'A branch/tag/commit to against'),
 				new InputArgument('source-before', InputArgument::REQUIRED, 'A directory to check (ex my-test/src)'),
 				new InputArgument('source-after', InputArgument::REQUIRED, 'A directory to check against (ex my-test/src)'),
+				new InputOption('to-json', null, InputOption::VALUE_REQUIRED, 'Output the result to a JSON file')
 			]);
 	}
 
@@ -93,10 +96,15 @@ class CompareCommand extends Command {
 		$analyzer = new Analyzer();
 		$report = $analyzer->analyze($registryBefore, $registryAfter);
 
-
 		$reporter = new Reporter($report);
 		$reporter->setFullPath(true);
 		$reporter->output($output);
+
+		$toJson = $input->getOption('to-json');
+		if ($toJson) {
+			$jsonReporter = new JsonReporter($report, $toJson);
+			$jsonReporter->output();
+		}
 
 		$duration = microtime(true) - $startTime;
 		$output->writeln('');
