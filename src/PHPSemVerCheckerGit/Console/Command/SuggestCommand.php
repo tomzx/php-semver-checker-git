@@ -26,8 +26,9 @@ class SuggestCommand extends Command
 		$this->setName('suggest')->setDescription('Compare a semantic versioned tag against a commit and provide a semantic version suggestion')->setDefinition([
 			new InputArgument('source-before', InputArgument::REQUIRED, 'A directory to check (ex my-test/src)'),
 			new InputArgument('source-after', InputArgument::REQUIRED, 'A directory to check against (ex my-test/src)'),
-			new InputOption('tag', null, InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
-			new InputOption('against', null, InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
+			new InputOption('tag', 't', InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
+			new InputOption('against', 'a', InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
+			new InputOption('allow-detached', 'd', InputOption::VALUE_NONE, 'Allow suggest to start from a detached HEAD'),
 		]);
 	}
 
@@ -68,8 +69,9 @@ class SuggestCommand extends Command
 
 		$initialBranch = $repository->getCurrentBranch();
 
-		if ( ! $initialBranch) {
-			$output->writeln('<error>You are on a detached branch, aborting.</error>');
+		if ( ! $input->getOption('allow-detached') && ! $initialBranch) {
+			$output->writeln('<error>You are on a detached HEAD, aborting.</error>');
+			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
 		}
 
