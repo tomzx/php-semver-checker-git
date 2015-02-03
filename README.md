@@ -17,8 +17,7 @@ The command line utility will use an existing `git` repository to compare to cha
 As this is still an alpha package, it is not suggested to include `php-semver-checker-git` directly in your composer.json. There are however a couple ways to use the tool:
 
 1. `php composer.phar create-project tomzx/php-semver-checker-git --stability=dev` will clone to a new php-semver-checker-git folder in your current working directory
-2. `php composer.phar global require tomzx/php-semver-checker-git --stability=dev` will clone it to your global composer location, so you can use it from anywhere.
-3. `git clone https://github.com/tomzx/php-semver-checker-git.git` and `php composer.phar install` in the newly cloned directory.
+2. `git clone https://github.com/tomzx/php-semver-checker-git.git` and `php composer.phar install` in the newly cloned directory.
 
 You may also download the [latest .phar build](https://github.com/tomzx/php-semver-checker-git/releases). Note that the .phar build is generally less bleeding edge than the previously mentioned methods.
 
