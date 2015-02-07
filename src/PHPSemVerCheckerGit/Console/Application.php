@@ -3,6 +3,7 @@
 namespace PHPSemVerCheckerGit\Console;
 
 use PHPSemVerCheckerGit\Console\Command\CompareCommand;
+use PHPSemVerCheckerGit\Console\Command\SelfUpdateCommand;
 use PHPSemVerCheckerGit\Console\Command\SuggestCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 
@@ -32,6 +33,7 @@ class Application extends SymfonyApplication {
 	{
 		$commands = parent::getDefaultCommands();
 		$commands[] = $this->add(new CompareCommand());
+		$commands[] = $this->add(new SelfUpdateCommand());
 		$commands[] = $this->add(new SuggestCommand());
 		return $commands;
 	}
