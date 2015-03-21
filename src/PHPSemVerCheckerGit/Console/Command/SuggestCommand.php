@@ -91,13 +91,7 @@ class SuggestCommand extends Command
 
 		$progress->clear();
 
-		$modifiedFiles = $repository->getModifiedFiles($tag, $against);
-		$modifiedFiles = array_filter($modifiedFiles, function ($modifiedFile) {
-			return substr($modifiedFile, -4) === '.php';
-		});
-
-		$initialBranch = $repository->getCurrentBranch();
-
+		// Finish with the tag commit
 		$repository->checkout($tag . ' --');
 
 		$sourceBefore = $fileIterator->getFilesAsArray($sourceBefore, '.php');
@@ -111,6 +105,7 @@ class SuggestCommand extends Command
 
 		$progress->clear();
 
+		// Reset repository to initial branch
 		if ($initialBranch) {
 			$repository->checkout($initialBranch);
 		}
