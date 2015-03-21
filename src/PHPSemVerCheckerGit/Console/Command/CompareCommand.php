@@ -5,10 +5,10 @@ namespace PHPSemVerCheckerGit\Console\Command;
 use File_Iterator_Facade;
 use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
-use PHPSemVerChecker\Reporter\JsonReporter;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
+use PHPSemVerCheckerGit\Reporter\JsonReporter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -101,7 +101,9 @@ class CompareCommand extends Command {
 
 		$toJson = $input->getOption('to-json');
 		if ($toJson) {
-			$jsonReporter = new JsonReporter($report, $toJson);
+			$commitBeforeHash = $repository->getCommit($commitBefore)->getHash();
+			$commitAfterHash = $repository->getCommit($commitAfter)->getHash();
+			$jsonReporter = new JsonReporter($report, $toJson, $commitBeforeHash, $commitAfterHash);
 			$jsonReporter->output();
 		}
 
