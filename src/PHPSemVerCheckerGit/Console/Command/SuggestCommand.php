@@ -11,13 +11,15 @@ use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use vierbergenlars\SemVer\version;
+use vierbergenlars\SemVer\expression as SemanticExpression;
+use vierbergenlars\SemVer\version as SemanticVersion;
 
 class SuggestCommand extends Command
 {
@@ -116,8 +118,8 @@ class SuggestCommand extends Command
 		$analyzer = new Analyzer();
 		$report = $analyzer->analyze($registryBefore, $registryAfter);
 
-		$tag = new version($tag);
-		$newTag = new version($tag);
+		$tag = new SemanticVersion($tag);
+		$newTag = new SemanticVersion($tag);
 
 		$suggestedLevel = $report->getSuggestedLevel();
 
@@ -145,31 +147,29 @@ class SuggestCommand extends Command
 
 	protected function findLatestTag(Repository $repository)
 	{
-		$tags = (array)$repository->getTags();
-
-		// Filter out non-semantic versioning tags
-		$tags = array_filter($tags, function ($tag) {
-			try {
-				$version = new version($tag);
-				return true;
-			} catch (\RuntimeException $e) {
-				return false;
-			}
-		});
-
-		if (empty($tags)) {
-			return null;
-		}
-
-		usort($tags, 'vierbergenlars\SemVer\version::rcompare');
-
-		return $tags[0];
+		return $this->findTag($repository, '*');
 	}
 
 	protected function findTag(Repository $repository, $tag)
 	{
 		$tags = (array)$repository->getTags();
 
-		return in_array($tag, $tags) ? $tag : null;
+		$tagExpression = new SemanticExpression($tag);
+
+		return $this->getMappedVersionTag($tags, $tagExpression->maxSatisfying($tags));
+	}
+
+	private function getMappedVersionTag(array $tags, $versionTag)
+	{
+		foreach ($tags as $tag) {
+			try {
+				if (SemanticVersion::eq($versionTag, $tag)) {
+					return $tag;
+				}
+			} catch (RuntimeException $e) {
+				// Do nothing
+			}
+		}
+		return null;
 	}
 }
