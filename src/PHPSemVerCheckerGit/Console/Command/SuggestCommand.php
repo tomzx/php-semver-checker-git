@@ -31,6 +31,7 @@ class SuggestCommand extends Command
 			new InputOption('tag', 't', InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
 			new InputOption('against', 'a', InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
 			new InputOption('allow-detached', 'd', InputOption::VALUE_NONE, 'Allow suggest to start from a detached HEAD'),
+			new InputOption('details', null, InputOption::VALUE_NONE, 'Report the changes on which the suggestion is based'),
 		]);
 	}
 
@@ -138,6 +139,11 @@ class SuggestCommand extends Command
 		$output->writeln('');
 		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
 		$output->writeln('<info>Suggested semantic version: ' . $newTag . '</info>');
+
+		if ($input->getOption('details')) {
+			$reporter = new Reporter($report);
+			$reporter->output($output);
+		}
 
 		$duration = microtime(true) - $startTime;
 		$output->writeln('');
