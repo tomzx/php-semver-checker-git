@@ -134,7 +134,7 @@ class SuggestCommand extends Command
 			if ($newTag->getPrerelease()) {
 				$newTag->inc('prerelease');
 			} else {
-				if ($newTag->getMajor() < 1) {
+				if ($newTag->getMajor() < 1 && $suggestedLevel === Level::MAJOR) {
 					$newTag->inc('minor');
 				} else {
 					$newTag->inc(strtolower(Level::toString($suggestedLevel)));
