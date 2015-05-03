@@ -36,7 +36,8 @@
 		"klaussilveira/gitter": "dev-php-semver-checker",
 		"nikic/php-parser": "dev-features/php-semver-checker",
 		"symfony/console": "~2.7@dev",
-		"tomzx/php-semver-checker": "~0.5",
+		"tomzx/finder": "~0.1@dev",
+		"tomzx/php-semver-checker": "~0.6",
 		"vierbergenlars/php-semver": "~3.0"
 	},
 	"require-dev": {

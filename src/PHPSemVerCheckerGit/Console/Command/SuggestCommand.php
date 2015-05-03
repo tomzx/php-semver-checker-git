@@ -2,10 +2,10 @@
 
 namespace PHPSemVerCheckerGit\Console\Command;
 
-use File_Iterator_Facade;
 use Gitter\Client;
 use Gitter\Repository;
 use PHPSemVerChecker\Analyzer\Analyzer;
+use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Registry\Registry;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
@@ -26,8 +26,10 @@ class SuggestCommand extends Command
 	protected function configure()
 	{
 		$this->setName('suggest')->setDescription('Compare a semantic versioned tag against a commit and provide a semantic version suggestion')->setDefinition([
-			new InputArgument('source-before', InputArgument::REQUIRED, 'A directory to check (ex my-test/src)'),
-			new InputArgument('source-after', InputArgument::REQUIRED, 'A directory to check against (ex my-test/src)'),
+			new InputOption('include-before', null,  InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
+			new InputOption('include-after', null, InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
+			new InputOption('exclude-before', null,  InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
+			new InputOption('exclude-after', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 			new InputOption('tag', 't', InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
 			new InputOption('against', 'a', InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
 			new InputOption('allow-detached', 'd', InputOption::VALUE_NONE, 'Allow suggest to start from a detached HEAD'),
@@ -39,15 +41,19 @@ class SuggestCommand extends Command
 	{
 		$startTime = microtime(true);
 
-		$target = getcwd();
-		$sourceBefore = $input->getArgument('source-before');
-		$sourceAfter = $input->getArgument('source-after');
+		$targetDirectory = getcwd();
 		$tag = $input->getOption('tag');
 		$against = $input->getOption('against') ?: 'HEAD';
 
+		$includeBefore = $input->getOption('include-before');
+		$excludeBefore = $input->getOption('exclude-before');
+
+		$includeAfter = $input->getOption('include-after');
+		$excludeAfter = $input->getOption('exclude-after');
+
 		$client = new Client();
 
-		$repository = $client->getRepository($target);
+		$repository = $client->getRepository($targetDirectory);
 
 		if ($tag === null) {
 			$tag = $this->findLatestTag($repository);
@@ -62,7 +68,7 @@ class SuggestCommand extends Command
 
 		$output->writeln('<info>Testing ' . $against . ' against tag: ' . $tag . '</info>');
 
-		$fileIterator = new File_Iterator_Facade;
+		$finder = new Finder();
 		$sourceFilter = new SourceFilter();
 		$beforeScanner = new Scanner();
 		$afterScanner = new Scanner();
@@ -83,7 +89,7 @@ class SuggestCommand extends Command
 		// Start with the against commit
 		$repository->checkout($against . ' --');
 
-		$sourceAfter = $fileIterator->getFilesAsArray($sourceAfter, '.php');
+		$sourceAfter = $finder->findFromString($targetDirectory, $includeAfter, $excludeAfter);
 		$sourceAfterMatchedCount = count($sourceAfter);
 		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
 		$progress = new ProgressBar($output, count($sourceAfter));
@@ -97,7 +103,7 @@ class SuggestCommand extends Command
 		// Finish with the tag commit
 		$repository->checkout($tag . ' --');
 
-		$sourceBefore = $fileIterator->getFilesAsArray($sourceBefore, '.php');
+		$sourceBefore = $finder->findFromString($targetDirectory, $includeBefore, $excludeBefore);
 		$sourceBeforeMatchedCount = count($sourceBefore);
 		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
 		$progress = new ProgressBar($output, count($sourceBefore));

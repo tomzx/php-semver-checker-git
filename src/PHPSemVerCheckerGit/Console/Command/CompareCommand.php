@@ -2,9 +2,9 @@
 
 namespace PHPSemVerCheckerGit\Console\Command;
 
-use File_Iterator_Facade;
 use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
+use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
@@ -25,8 +25,10 @@ class CompareCommand extends Command {
 			->setDefinition([
 				new InputArgument('before', InputArgument::REQUIRED, 'A branch/tag/commit to check'),
 				new InputArgument('after', InputArgument::REQUIRED, 'A branch/tag/commit to against'),
-				new InputArgument('source-before', InputArgument::REQUIRED, 'A directory to check (ex my-test/src)'),
-				new InputArgument('source-after', InputArgument::REQUIRED, 'A directory to check against (ex my-test/src)'),
+				new InputOption('include-before', null,  InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
+				new InputOption('include-after', null, InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
+				new InputOption('exclude-before', null,  InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
+				new InputOption('exclude-after', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 				new InputOption('to-json', null, InputOption::VALUE_REQUIRED, 'Output the result to a JSON file')
 			]);
 	}
@@ -35,20 +37,24 @@ class CompareCommand extends Command {
 	{
 		$startTime = microtime(true);
 
-		$target = getcwd();
+		$targetDirectory = getcwd();
 		$commitBefore = $input->getArgument('before');
 		$commitAfter = $input->getArgument('after');
-		$sourceBefore = $input->getArgument('source-before');
-		$sourceAfter = $input->getArgument('source-after');
 
-		$fileIterator = new File_Iterator_Facade;
+		$includeBefore = $input->getOption('include-before');
+		$excludeBefore = $input->getOption('exclude-before');
+
+		$includeAfter = $input->getOption('include-after');
+		$excludeAfter = $input->getOption('exclude-after');
+
+		$finder = new Finder();
 		$sourceFilter = new SourceFilter();
 		$beforeScanner = new Scanner();
 		$afterScanner = new Scanner();
 
 		$client = new Client();
 
-		$repository = $client->getRepository($target);
+		$repository = $client->getRepository($targetDirectory);
 
 		$modifiedFiles = $repository->getModifiedFiles($commitBefore, $commitAfter);
 		$modifiedFiles = array_filter($modifiedFiles, function ($modifiedFile) {
@@ -59,7 +65,7 @@ class CompareCommand extends Command {
 
 		$repository->checkout($commitBefore . ' --');
 
-		$sourceBefore = $fileIterator->getFilesAsArray($sourceBefore, '.php');
+		$sourceBefore = $finder->findFromString($targetDirectory, $includeBefore, $excludeBefore);
 		$sourceBeforeMatchedCount = count($sourceBefore);
 		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
 		$progress = new ProgressBar($output, count($sourceBefore));
@@ -72,7 +78,7 @@ class CompareCommand extends Command {
 
 		$repository->checkout($commitAfter . ' --');
 
-		$sourceAfter = $fileIterator->getFilesAsArray($sourceAfter, '.php');
+		$sourceAfter = $finder->findFromString($targetDirectory, $includeAfter, $excludeAfter);
 		$sourceAfterMatchedCount = count($sourceAfter);
 		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
 		$progress = new ProgressBar($output, count($sourceAfter));
