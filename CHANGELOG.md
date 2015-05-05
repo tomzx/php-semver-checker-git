@@ -4,7 +4,7 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## Unreleased <a name="unreleased"></a>
 
-## v0.4.0 - 2015-05-03 <a name="v0.4.0"></a>
+## <a name="v0.4.0"></a>v0.4.0 (2015-05-03) 
 ### Added
 * Support for includes/excludes through the command line options
 
@@ -14,7 +14,7 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 ### Fixed
 * Fix a minor issue where a `MINOR` would be suggested instead of a `PATCH` for version <1.0.0
 
-## v0.3.0 - 2015-05-02 <a name="v0.3.0"></a>
+## <a name="v0.3.0"></a>v0.3.0 (2015-05-02)
 ### Added
 * Support for self-updating of the phar file through a new `SelfUpdateCommand`
 * You can run the `suggest` command and pass it a `--tag=~1.0` option (support semantic versioning constraints)
@@ -25,7 +25,7 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 	* Adds a before/after hash to the exported JSON
 * Increased `xdebug.max_nesting_level` to 5000
 
-## v0.2.0 - 2015-01-25 <a name="v0.2.0"></a>
+## <a name="v0.2.0"></a>v0.2.0 (2015-01-25)
 ### Added
 * Filter source based on the list of modified files between two given commits
 * Added `--to-json` option to the compare command
@@ -36,6 +36,6 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 ### Removed
 * Removed target from the `compare` command arguments
 
-## v0.1.0 - 2015-01-23 <a name="v0.1.0"></a>
+## <a name="v0.1.0"></a>v0.1.0 (2015-01-23)
 
 Initial release
