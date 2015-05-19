@@ -30,18 +30,25 @@ See the example section for examples of how to use the tool.
 ### Compare two commits (without semantic versioning)
 
 ```bash
-# arguments are: before-commit/branch/tag after-commit/branch/tag before-source after-source
-php bin/php-semver-checker-git compare v1.6.4 v2.0.0 src src
+# arguments are: before-commit/branch/tag after-commit/branch/tag
+php bin/php-semver-checker-git compare v1.6.4 v2.0.0 --include-before=src --include-after=src
 ```
 
 ### Compare HEAD against your latest semantic version tag
 
 ```bash
-# arguments are: before-source after-source
-php bin/php-semver-checker-git suggest src src --allow-detached
+php bin/php-semver-checker-git suggest --allow-detached --include-before=src --include-after=src
 ```
 
 Note: `--allow-detached` is very useful when you are running this command on [`travis-ci`](https://travis-ci.org) or any other continuous integration provider. It is necessary when a checkout is done on a particular commit, which makes `HEAD` become `detached`. If this option is not passed to the command, it will abort. This is done because it is impossible to revert the original `detached` branch when the `suggest` command completes.
+
+### Compare HEAD against a specific tag constraint
+
+```bash
+php bin/php-semver-checker-git suggest --allow-detached --include-before=src --include-after=src  --tag=~5.0
+```
+
+Note: `--tag` supports any semantic versioning constraint such as `<`, `<=`, `>=`, '>', `~x.y.z` and `x.y.*`.
 
 ## License
 
