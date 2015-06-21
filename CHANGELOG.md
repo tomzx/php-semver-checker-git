@@ -2,7 +2,11 @@
 
 This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
-## Unreleased <a name="unreleased"></a>
+## <a name="unreleased"></a>Unreleased
+
+## <a name="v0.4.1"></a>v0.4.1 (2015-06-20) 
+### Changed
+* Update `php-semver-checker` to v0.6.3
 
 ## <a name="v0.4.0"></a>v0.4.0 (2015-05-03) 
 ### Added
