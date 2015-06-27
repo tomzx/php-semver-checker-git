@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8c0660b2a081250caa77f82cec9b9090",
+    "hash": "1642e7b0e26071afb61010cfea282f33",
     "packages": [
+        {
+            "name": "hassankhan/config",
+            "version": "0.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hassankhan/config.git",
+                "reference": "42ba051954745b565306f0f82c57814f54579f8d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hassankhan/config/zipball/42ba051954745b565306f0f82c57814f54579f8d",
+                "reference": "42ba051954745b565306f0f82c57814f54579f8d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "scrutinizer/ocular": "~1.1",
+                "squizlabs/php_codesniffer": "~2.2"
+            },
+            "suggest": {
+                "symfony/yaml": "~2.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Noodlehaus\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hassan Khan",
+                    "homepage": "http://hassankhan.me/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lightweight configuration file loader that supports PHP, INI, XML, JSON, and YAML files",
+            "homepage": "http://hassankhan.me/config/",
+            "keywords": [
+                "config",
+                "configuration",
+                "ini",
+                "json",
+                "microphp",
+                "unframework",
+                "xml",
+                "yaml",
+                "yml"
+            ],
+            "time": "2015-03-21 11:21:39"
+        },
         {
             "name": "herrera-io/json",
             "version": "1.0.3",
@@ -297,16 +354,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "dev-features/php-semver-checker",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tomzx/PHP-Parser.git",
-                "reference": "256dd9e0a3fd5c07e7c280c62390e493ca8f289d"
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "dff239267fd1befa1cd40430c9ed12591aa720ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/PHP-Parser/zipball/256dd9e0a3fd5c07e7c280c62390e493ca8f289d",
-                "reference": "256dd9e0a3fd5c07e7c280c62390e493ca8f289d",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dff239267fd1befa1cd40430c9ed12591aa720ca",
+                "reference": "dff239267fd1befa1cd40430c9ed12591aa720ca",
                 "shasum": ""
             },
             "require": {
@@ -316,7 +373,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -324,6 +381,7 @@
                     "lib/bootstrap.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -337,10 +395,7 @@
                 "parser",
                 "php"
             ],
-            "support": {
-                "source": "https://github.com/tomzx/PHP-Parser/tree/features/php-semver-checker"
-            },
-            "time": "2015-01-14 06:06:08"
+            "time": "2015-05-02 15:40:40"
         },
         {
             "name": "seld/jsonlint",
@@ -545,21 +600,22 @@
         },
         {
             "name": "tomzx/php-semver-checker",
-            "version": "v0.6.3",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomzx/php-semver-checker.git",
-                "reference": "94f517a433b3a94e42739a4b592ba67fe8462d05"
+                "reference": "51ca9243f8c7d7707fabacb6c9a62205cf90d5b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/94f517a433b3a94e42739a4b592ba67fe8462d05",
-                "reference": "94f517a433b3a94e42739a4b592ba67fe8462d05",
+                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/51ca9243f8c7d7707fabacb6c9a62205cf90d5b8",
+                "reference": "51ca9243f8c7d7707fabacb6c9a62205cf90d5b8",
                 "shasum": ""
             },
             "require": {
+                "hassankhan/config": "~0.8",
                 "herrera-io/phar-update": "~2.0",
-                "nikic/php-parser": "dev-features/php-semver-checker",
+                "nikic/php-parser": "~1.3",
                 "php": ">=5.4.0",
                 "symfony/console": "~2.7",
                 "tomzx/finder": "~0.1@dev"
@@ -597,7 +653,7 @@
                 "semantic versioning",
                 "semver"
             ],
-            "time": "2015-06-18 12:09:24"
+            "time": "2015-06-26 02:55:10"
         },
         {
             "name": "vierbergenlars/php-semver",
@@ -1037,16 +1093,16 @@
         },
         {
             "name": "phpunit/php-text-template",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-text-template.git",
-                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a"
+                "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
-                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
+                "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
                 "shasum": ""
             },
             "require": {
@@ -1055,20 +1111,17 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "Text/"
+                    "src/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                ""
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
+                    "email": "sebastian@phpunit.de",
                     "role": "lead"
                 }
             ],
@@ -1077,7 +1130,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2014-01-30 17:20:04"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -1171,16 +1224,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.7.4",
+            "version": "4.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e5f851f324f7add846316f39e668e9deac97a103"
+                "reference": "f6701ef3faea759acd1910a7751d8d102a7fd5bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e5f851f324f7add846316f39e668e9deac97a103",
-                "reference": "e5f851f324f7add846316f39e668e9deac97a103",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f6701ef3faea759acd1910a7751d8d102a7fd5bc",
+                "reference": "f6701ef3faea759acd1910a7751d8d102a7fd5bc",
                 "shasum": ""
             },
             "require": {
@@ -1239,7 +1292,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-06-18 13:33:26"
+            "time": "2015-06-21 07:23:36"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1634,16 +1687,16 @@
         },
         {
             "name": "sebastian/version",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/version.git",
-                "reference": "ab931d46cd0d3204a91e1b9a40c4bc13032b58e4"
+                "reference": "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/ab931d46cd0d3204a91e1b9a40c4bc13032b58e4",
-                "reference": "ab931d46cd0d3204a91e1b9a40c4bc13032b58e4",
+                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6",
+                "reference": "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6",
                 "shasum": ""
             },
             "type": "library",
@@ -1665,7 +1718,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2015-02-24 06:35:25"
+            "time": "2015-06-21 13:59:46"
         },
         {
             "name": "symfony/yaml",
@@ -1721,7 +1774,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "klaussilveira/gitter": 20,
-        "nikic/php-parser": 20,
         "tomzx/finder": 20
     },
     "prefer-stable": false,

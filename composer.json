@@ -23,10 +23,6 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/tomzx/php-parser"
-		},
-		{
-			"type": "vcs",
 			"url": "https://github.com/tomzx/gitter"
 		}
 	],
@@ -35,10 +31,9 @@
 
 		"herrera-io/phar-update": "~2.0",
 		"klaussilveira/gitter": "dev-php-semver-checker",
-		"nikic/php-parser": "dev-features/php-semver-checker",
 		"symfony/console": "~2.7",
 		"tomzx/finder": "~0.1@dev",
-		"tomzx/php-semver-checker": "~0.6",
+		"tomzx/php-semver-checker": "~0.7",
 		"vierbergenlars/php-semver": "~3.0"
 	},
 	"require-dev": {
