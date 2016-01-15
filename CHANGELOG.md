@@ -3,6 +3,8 @@
 This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
+### Added
+* Let Composer automatically install executable in `vendor/bin`
 
 ## <a name="v0.4.2"></a>v0.4.2 (2015-06-25) 
 ### Changed
