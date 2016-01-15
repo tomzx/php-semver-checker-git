@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1642e7b0e26071afb61010cfea282f33",
+    "hash": "19564b63f27802e69cda22b76651aa6c",
+    "content-hash": "e9cdbd31d0cf2161d9680095d6cf470f",
     "packages": [
         {
             "name": "hassankhan/config",
@@ -68,12 +69,12 @@
             "version": "1.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/herrera-io/php-json.git",
+                "url": "https://github.com/kherge-abandoned/php-json.git",
                 "reference": "60c696c9370a1e5136816ca557c17f82a6fa83f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/herrera-io/php-json/zipball/60c696c9370a1e5136816ca557c17f82a6fa83f1",
+                "url": "https://api.github.com/repos/kherge-abandoned/php-json/zipball/60c696c9370a1e5136816ca557c17f82a6fa83f1",
                 "reference": "60c696c9370a1e5136816ca557c17f82a6fa83f1",
                 "shasum": ""
             },
@@ -129,12 +130,12 @@
             "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/herrera-io/php-phar-update.git",
+                "url": "https://github.com/kherge-abandoned/php-phar-update.git",
                 "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/herrera-io/php-phar-update/zipball/15643c90d3d43620a4f45c910e6afb7a0ad4b488",
+                "url": "https://api.github.com/repos/kherge-abandoned/php-phar-update/zipball/15643c90d3d43620a4f45c910e6afb7a0ad4b488",
                 "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488",
                 "shasum": ""
             },
@@ -187,12 +188,12 @@
             "version": "1.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/herrera-io/php-version.git",
+                "url": "https://github.com/kherge-abandoned/php-version.git",
                 "reference": "d39d9642b92a04d8b8a28b871b797a35a2545e85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/herrera-io/php-version/zipball/d39d9642b92a04d8b8a28b871b797a35a2545e85",
+                "url": "https://api.github.com/repos/kherge-abandoned/php-version/zipball/d39d9642b92a04d8b8a28b871b797a35a2545e85",
                 "reference": "d39d9642b92a04d8b8a28b871b797a35a2545e85",
                 "shasum": ""
             },
@@ -310,7 +311,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/gitter/zipball/7ae988f8e3589269a6ab5cfeb4f791031854e864",
+                "url": "https://api.github.com/repos/tomzx/gitter/zipball/da53511de140bacf97112900eaf22af2bceaeb6a",
                 "reference": "7ae988f8e3589269a6ab5cfeb4f791031854e864",
                 "shasum": ""
             },
@@ -448,12 +449,12 @@
             "version": "v2.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "564398bc1f33faf92fc2ec86859983d30eb81806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/564398bc1f33faf92fc2ec86859983d30eb81806",
+                "url": "https://api.github.com/repos/symfony/console/zipball/564398bc1f33faf92fc2ec86859983d30eb81806",
                 "reference": "564398bc1f33faf92fc2ec86859983d30eb81806",
                 "shasum": ""
             },
@@ -559,7 +560,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/finder/zipball/d953efcb40ad76a1fbeca63fa4178b6bc2673ef5",
+                "url": "https://api.github.com/repos/tomzx/finder/zipball/c5922211e5c63f1cd8cf15ea1d95f0ddaba5c672",
                 "reference": "d953efcb40ad76a1fbeca63fa4178b6bc2673ef5",
                 "shasum": ""
             },
