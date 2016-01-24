@@ -4,7 +4,6 @@ namespace PHPSemVerCheckerGit\Console\Command;
 
 use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
-use PHPSemVerChecker\Configuration\LevelMapping;
 use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
