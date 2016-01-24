@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ccdd89e9ef43cace162ae8098f8ba991",
-    "content-hash": "79bbe2456dc07946604efc1e34968177",
+    "hash": "3b39c1b5ccbe4dac7825f2e6d7f27ee7",
+    "content-hash": "0582581ab69dcdd0c8dcaa3b72130dfc",
     "packages": [
         {
             "name": "hassankhan/config",
@@ -712,16 +712,16 @@
         },
         {
             "name": "tomzx/php-semver-checker",
-            "version": "v0.8.0",
+            "version": "v0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomzx/php-semver-checker.git",
-                "reference": "55ac8ae7fbce25bc3a2b40601ef35f70743a603a"
+                "reference": "6d20ccc8c5ab038a5d43238686d32934a57afe00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/55ac8ae7fbce25bc3a2b40601ef35f70743a603a",
-                "reference": "55ac8ae7fbce25bc3a2b40601ef35f70743a603a",
+                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/6d20ccc8c5ab038a5d43238686d32934a57afe00",
+                "reference": "6d20ccc8c5ab038a5d43238686d32934a57afe00",
                 "shasum": ""
             },
             "require": {
@@ -743,7 +743,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.8-dev"
+                    "dev-master": "0.9-dev"
                 }
             },
             "autoload": {
@@ -769,7 +769,7 @@
                 "semantic versioning",
                 "semver"
             ],
-            "time": "2016-01-24 00:47:24"
+            "time": "2016-01-24 04:20:12"
         },
         {
             "name": "vierbergenlars/php-semver",
