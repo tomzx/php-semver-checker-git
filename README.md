@@ -18,12 +18,46 @@ The command line utility will use an existing `git` repository to compare to cha
 
 As this is still an alpha package, it is not suggested to include `php-semver-checker-git` directly in your composer.json. There are however a couple ways to use the tool:
 
-1. `php composer.phar create-project tomzx/php-semver-checker-git --stability=dev` will clone to a new php-semver-checker-git folder in your current working directory
-2. `git clone https://github.com/tomzx/php-semver-checker-git.git` and `php composer.phar install` in the newly cloned directory.
-
-You may also download the [latest .phar build](https://github.com/tomzx/php-semver-checker-git/releases). Note that the .phar build is generally less bleeding edge than the previously mentioned methods.
+1. **Preferred method** Download the [latest .phar build](http://psvcg.coreteks.org/php-semver-checker-git.phar). Note that the .phar build is generally less bleeding edge than the following methods.
+2. `php composer.phar create-project tomzx/php-semver-checker-git --stability=dev` will clone to a new php-semver-checker-git folder in your current working directory
+3. `git clone https://github.com/tomzx/php-semver-checker-git.git` and `php composer.phar install` in the newly cloned directory.
 
 See the example section for examples of how to use the tool.
+
+### Using `php-semver-checker-git` with `travis-ci`
+
+It is very easy to add `php-semver-checker-git` to your build process and to get a nice report you can check in the `travis-ci` logs.
+
+```
+language: php
+
+# Your configuration
+
+after_script:
+    - wget http://psvcg.coreteks.org/php-semver-checker-git.phar
+    - php php-semver-checker-git.phar suggest --allow-detached -vvv --details --include-before=src --include-after=src
+```
+
+In order to simplify the above call to `php-semver-checker-git`, we suggest you create a `php-semver-checker-git.yml` configuration file at the root of your project. In it, you can put the following:
+
+```yml
+allow-detached: true
+details: true
+include-before: src
+include-after: src
+```
+
+With this configuration file, you can then use the following in your `.travis.yml` file.
+
+```
+language: php
+
+# Your configuration
+
+after_script:
+    - wget http://psvcg.coreteks.org/php-semver-checker-git.phar
+    - php php-semver-checker-git.phar -vvv
+```
 
 ## Example
 
