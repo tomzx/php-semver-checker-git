@@ -4,19 +4,19 @@ namespace PHPSemVerCheckerGit\Console\Command;
 
 use Gitter\Client;
 use PHPSemVerChecker\Analyzer\Analyzer;
+use PHPSemVerChecker\Configuration\LevelMapping;
 use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
 use PHPSemVerCheckerGit\Reporter\JsonReporter;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CompareCommand extends Command {
+class CompareCommand extends BaseCommand {
 	protected function configure()
 	{
 		$this
@@ -29,6 +29,7 @@ class CompareCommand extends Command {
 				new InputOption('include-after', null, InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
 				new InputOption('exclude-before', null,  InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 				new InputOption('exclude-after', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
+				new InputOption('config', null, InputOption::VALUE_REQUIRED, 'A configuration file to configure php-semver-checker-git'),
 				new InputOption('to-json', null, InputOption::VALUE_REQUIRED, 'Output the result to a JSON file')
 			]);
 	}
@@ -38,14 +39,14 @@ class CompareCommand extends Command {
 		$startTime = microtime(true);
 
 		$targetDirectory = getcwd();
-		$commitBefore = $input->getArgument('before');
-		$commitAfter = $input->getArgument('after');
+		$commitBefore = $this->config->get('before');
+		$commitAfter = $this->config->get('after');
 
-		$includeBefore = $input->getOption('include-before');
-		$excludeBefore = $input->getOption('exclude-before');
+		$includeBefore = $this->config->get('include-before');
+		$excludeBefore = $this->config->get('exclude-before');
 
-		$includeAfter = $input->getOption('include-after');
-		$excludeAfter = $input->getOption('exclude-after');
+		$includeAfter = $this->config->get('include-after');
+		$excludeAfter = $this->config->get('exclude-after');
 
 		$finder = new Finder();
 		$sourceFilter = new SourceFilter();
@@ -105,7 +106,7 @@ class CompareCommand extends Command {
 		$reporter->setFullPath(true);
 		$reporter->output($output);
 
-		$toJson = $input->getOption('to-json');
+		$toJson = $this->config->get('to-json');
 		if ($toJson) {
 			$commitBeforeHash = $repository->getCommit($commitBefore)->getHash();
 			$commitAfterHash = $repository->getCommit($commitAfter)->getHash();

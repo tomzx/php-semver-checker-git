@@ -12,7 +12,6 @@ use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use vierbergenlars\SemVer\expression as SemanticExpression;
 use vierbergenlars\SemVer\version as SemanticVersion;
 
-class SuggestCommand extends Command
+class SuggestCommand extends BaseCommand
 {
 	protected function configure()
 	{
@@ -34,6 +33,7 @@ class SuggestCommand extends Command
 			new InputOption('against', 'a', InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
 			new InputOption('allow-detached', 'd', InputOption::VALUE_NONE, 'Allow suggest to start from a detached HEAD'),
 			new InputOption('details', null, InputOption::VALUE_NONE, 'Report the changes on which the suggestion is based'),
+			new InputOption('config', null, InputOption::VALUE_REQUIRED, 'A configuration file to configure php-semver-checker-git'),
 		]);
 	}
 
@@ -42,14 +42,14 @@ class SuggestCommand extends Command
 		$startTime = microtime(true);
 
 		$targetDirectory = getcwd();
-		$tag = $input->getOption('tag');
-		$against = $input->getOption('against') ?: 'HEAD';
+		$tag = $this->config->get('tag');
+		$against = $this->config->get('against') ?: 'HEAD';
 
-		$includeBefore = $input->getOption('include-before');
-		$excludeBefore = $input->getOption('exclude-before');
+		$includeBefore = $this->config->get('include-before');
+		$excludeBefore = $this->config->get('exclude-before');
 
-		$includeAfter = $input->getOption('include-after');
-		$excludeAfter = $input->getOption('exclude-after');
+		$includeAfter = $this->config->get('include-after');
+		$excludeAfter = $this->config->get('exclude-after');
 
 		$client = new Client();
 
@@ -80,7 +80,7 @@ class SuggestCommand extends Command
 
 		$initialBranch = $repository->getCurrentBranch();
 
-		if ( ! $input->getOption('allow-detached') && ! $initialBranch) {
+		if ( ! $this->config->get('allow-detached') && ! $initialBranch) {
 			$output->writeln('<error>You are on a detached HEAD, aborting.</error>');
 			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
@@ -146,7 +146,7 @@ class SuggestCommand extends Command
 		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
 		$output->writeln('<info>Suggested semantic version: ' . $newTag . '</info>');
 
-		if ($input->getOption('details')) {
+		if ($this->config->get('details')) {
 			$reporter = new Reporter($report);
 			$reporter->output($output);
 		}
