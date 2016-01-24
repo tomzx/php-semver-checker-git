@@ -4,15 +4,24 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
-## <a name="v0.4.2"></a>v0.4.2 (2015-06-25) 
+## <a name="v0.5.0"></a>v0.5.0 (2016-01-23)
+### Added
+* `php-semver-checker-git` can now be called from `vendor/bin/php-semver-checker-git`
+* [#15] Read `php-semver-checker-git.yaml` configuration file by default
+* [#17] Add configuration file support
+
+### Changed
+* Update `php-semver-checker` to v0.8.0
+
+## <a name="v0.4.2"></a>v0.4.2 (2015-06-25)
 ### Changed
 * Update `php-semver-checker` to v0.7.0
 
-## <a name="v0.4.1"></a>v0.4.1 (2015-06-20) 
+## <a name="v0.4.1"></a>v0.4.1 (2015-06-20)
 ### Changed
 * Update `php-semver-checker` to v0.6.3
 
-## <a name="v0.4.0"></a>v0.4.0 (2015-05-03) 
+## <a name="v0.4.0"></a>v0.4.0 (2015-05-03)
 ### Added
 * Support for includes/excludes through the command line options
 
