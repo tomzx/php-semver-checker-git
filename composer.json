@@ -33,7 +33,7 @@
 		"klaussilveira/gitter": "dev-php-semver-checker",
 		"symfony/console": "~2.7|~3.0",
 		"tomzx/finder": "~0.1",
-		"tomzx/php-semver-checker": "~0.8.1",
+		"tomzx/php-semver-checker": "~0.9",
 		"vierbergenlars/php-semver": "~3.0"
 	},
 	"require-dev": {
