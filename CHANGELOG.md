@@ -4,7 +4,12 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
-## <a name="v0.5.1"></a>v0.5.0 (2016-01-23)
+## <a name="v0.5.2"></a>v0.5.2 (2016-02-11)
+[Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.1...v0.5.2)
+### Changed
+* Update `php-semver-checker` to v0.9.1
+
+## <a name="v0.5.1"></a>v0.5.1 (2016-01-23)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.0...v0.5.1)
 ### Changed
 * Update `php-semver-checker` to v0.8.1
