@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1941a1850758fe5b6d7bf1a9f0979f10",
-    "content-hash": "289c5cb1f6d1c28d717d89eb75dab6d4",
+    "hash": "680807ae7d695c8cf42549e075a0bce4",
+    "content-hash": "88f3d2ebd3ba484a05dcad95f39a327f",
     "packages": [
         {
             "name": "hassankhan/config",
-            "version": "0.9.1",
+            "version": "0.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hassankhan/config.git",
-                "reference": "f57a068cf6551708f5ed36cd424077bf72881818"
+                "reference": "06ac500348af033f1a2e44dc357ca86282626d4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hassankhan/config/zipball/f57a068cf6551708f5ed36cd424077bf72881818",
-                "reference": "f57a068cf6551708f5ed36cd424077bf72881818",
+                "url": "https://api.github.com/repos/hassankhan/config/zipball/06ac500348af033f1a2e44dc357ca86282626d4a",
+                "reference": "06ac500348af033f1a2e44dc357ca86282626d4a",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "yaml",
                 "yml"
             ],
-            "time": "2016-01-23 21:29:42"
+            "time": "2016-02-11 16:21:17"
         },
         {
             "name": "herrera-io/json",
@@ -718,20 +718,20 @@
         },
         {
             "name": "tomzx/php-semver-checker",
-            "version": "v0.9.0",
+            "version": "v0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomzx/php-semver-checker.git",
-                "reference": "bcab12a61e003d95e869c88a7da64df91e6f8294"
+                "reference": "5294dcb1bc34d3248a435e1ddbd81da94101f68b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/bcab12a61e003d95e869c88a7da64df91e6f8294",
-                "reference": "bcab12a61e003d95e869c88a7da64df91e6f8294",
+                "url": "https://api.github.com/repos/tomzx/php-semver-checker/zipball/5294dcb1bc34d3248a435e1ddbd81da94101f68b",
+                "reference": "5294dcb1bc34d3248a435e1ddbd81da94101f68b",
                 "shasum": ""
             },
             "require": {
-                "hassankhan/config": "~0.9",
+                "hassankhan/config": "~0.10",
                 "herrera-io/phar-update": "~2.0",
                 "nikic/php-parser": "~2.0",
                 "php": ">=5.4.0",
@@ -741,7 +741,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4"
+                "phpunit/phpunit": "~4.0|~5.0"
             },
             "bin": [
                 "bin/php-semver-checker"
@@ -749,7 +749,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.9-dev"
+                    "dev-master": "0.10-dev"
                 }
             },
             "autoload": {
@@ -775,7 +775,7 @@
                 "semantic versioning",
                 "semver"
             ],
-            "time": "2016-01-27 16:26:25"
+            "time": "2016-02-11 18:03:00"
         },
         {
             "name": "vierbergenlars/php-semver",
@@ -1388,16 +1388,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.2.3",
+            "version": "5.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6fdb1d3004ebc7071c4ac62f2881d67c5c11fb59"
+                "reference": "ebde9bac26b1138eb99e1aa841feaa51b4a08314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6fdb1d3004ebc7071c4ac62f2881d67c5c11fb59",
-                "reference": "6fdb1d3004ebc7071c4ac62f2881d67c5c11fb59",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ebde9bac26b1138eb99e1aa841feaa51b4a08314",
+                "reference": "ebde9bac26b1138eb99e1aa841feaa51b4a08314",
                 "shasum": ""
             },
             "require": {
@@ -1458,7 +1458,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-02-08 12:15:53"
+            "time": "2016-02-11 14:58:25"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
