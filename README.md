@@ -24,6 +24,13 @@ As this is still an alpha package, it is not suggested to include `php-semver-ch
 
 See the example section for examples of how to use the tool.
 
+### Building `php-semver-checker-git.phar`
+First, make sure you have [box](https://github.com/box-project/box2) installed. Then, in the base directory, you can run the following command which will generate the `php-semver-checker-git.phar` file.
+
+```
+box build
+```
+
 ### Using `php-semver-checker-git` with `travis-ci`
 
 It is very easy to add `php-semver-checker-git` to your build process and to get a nice report you can check in the `travis-ci` logs.
