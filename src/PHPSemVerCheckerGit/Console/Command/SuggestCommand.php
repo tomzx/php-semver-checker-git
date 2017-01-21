@@ -184,7 +184,14 @@ class SuggestCommand extends BaseCommand
 
 		$tagExpression = new SemanticExpression($tag);
 
-		return $this->getMappedVersionTag($tags, $tagExpression->maxSatisfying($tags));
+		try {
+			// Throws an exception if it cannot find a matching version
+			$satisfyingTag = $tagExpression->maxSatisfying($tags);
+		} catch (SemanticVersionException $e) {
+			return null;
+		}
+
+		return $this->getMappedVersionTag($tags, $satisfyingTag);
 	}
 
 	private function filterTags(array $tags)
