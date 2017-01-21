@@ -4,6 +4,12 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
+## <a name="v0.5.4"></a>v0.5.4 (2017-01-21)
+[Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.3...v0.5.4)
+### Fixed
+* [#24] Invalid Version: v2.0.0BETA1 when parsing Symfony repository
+* [#25] Invalid Version: [[]] when no tag can be found
+
 ## <a name="v0.5.3"></a>v0.5.3 (2016-05-13)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.2...v0.5.3)
 ### Changed
