@@ -16,16 +16,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use vierbergenlars\SemVer\expression as SemanticExpression;
+use vierbergenlars\SemVer\SemVerException as SemanticVersionException;
 use vierbergenlars\SemVer\version as SemanticVersion;
 
 class SuggestCommand extends BaseCommand
 {
+	/**
+	 * @return void
+	 */
 	protected function configure()
 	{
 		$this->setName('suggest')->setDescription('Compare a semantic versioned tag against a commit and provide a semantic version suggestion')->setDefinition([
 			new InputOption('include-before', null,  InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
 			new InputOption('include-after', null, InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
-			new InputOption('exclude-before', null,  InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
+			new InputOption('exclude-before', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 			new InputOption('exclude-after', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 			new InputOption('tag', 't', InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
 			new InputOption('against', 'a', InputOption::VALUE_REQUIRED, 'What to test against the tag (HEAD by default)'),
@@ -35,6 +39,10 @@ class SuggestCommand extends BaseCommand
 		]);
 	}
 
+	/**
+	 * @param \Symfony\Component\Console\Input\InputInterface   $input
+	 * @param \Symfony\Component\Console\Output\OutputInterface $output
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$startTime = microtime(true);
@@ -151,24 +159,53 @@ class SuggestCommand extends BaseCommand
 
 		$duration = microtime(true) - $startTime;
 		$output->writeln('');
-		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' ('.$sourceBeforeMatchedCount.' unfiltered), After: ' . count($sourceAfter) . ' ('.$sourceAfterMatchedCount.'  unfiltered)');
+		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)');
 		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
 	}
 
+	/**
+	 * @param \Gitter\Repository $repository
+	 * @return string|null
+	 */
 	protected function findLatestTag(Repository $repository)
 	{
 		return $this->findTag($repository, '*');
 	}
 
+	/**
+	 * @param \Gitter\Repository $repository
+	 * @param string             $tag
+	 * @return string|null
+	 */
 	protected function findTag(Repository $repository, $tag)
 	{
 		$tags = (array)$repository->getTags();
+		$tags = $this->filterTags($tags);
 
 		$tagExpression = new SemanticExpression($tag);
 
 		return $this->getMappedVersionTag($tags, $tagExpression->maxSatisfying($tags));
 	}
 
+	private function filterTags(array $tags)
+	{
+		$filteredTags = [];
+		foreach ($tags as $tag) {
+			try {
+				new SemanticVersion($tag);
+				$filteredTags[] = $tag;
+			} catch (SemanticVersionException $e) {
+				// Do nothing
+			}
+		}
+		return $filteredTags;
+	}
+
+	/**
+	 * @param string[]                                   $tags
+	 * @param \vierbergenlars\SemVer\version|string|null $versionTag
+	 * @return string|null
+	 */
 	private function getMappedVersionTag(array $tags, $versionTag)
 	{
 		foreach ($tags as $tag) {
