@@ -27,8 +27,8 @@ class SuggestCommand extends BaseCommand
 	protected function configure()
 	{
 		$this->setName('suggest')->setDescription('Compare a semantic versioned tag against a commit and provide a semantic version suggestion')->setDefinition([
-			new InputOption('include-before', null,  InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
-			new InputOption('include-after', null, InputOption::VALUE_OPTIONAL, 'List of paths to include <info>(comma separated)</info>'),
+			new InputOption('include-before', null, InputOption::VALUE_REQUIRED, 'List of paths to include <info>(comma separated)</info>'),
+			new InputOption('include-after', null, InputOption::VALUE_REQUIRED, 'List of paths to include <info>(comma separated)</info>'),
 			new InputOption('exclude-before', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 			new InputOption('exclude-after', null, InputOption::VALUE_REQUIRED, 'List of paths to exclude <info>(comma separated)</info>'),
 			new InputOption('tag', 't', InputOption::VALUE_REQUIRED, 'A tag to test against (latest by default)'),
