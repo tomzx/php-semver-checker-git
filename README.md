@@ -1,5 +1,7 @@
 # PHP Semantic Versioning Checker for `git`
 
+[![Join the chat at https://gitter.im/tomzx/php-semver-checker-git](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tomzx/php-semver-checker-git?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![License](https://poser.pugx.org/tomzx/php-semver-checker-git/license.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
 [![Latest Stable Version](https://poser.pugx.org/tomzx/php-semver-checker-git/v/stable.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
 [![Latest Unstable Version](https://poser.pugx.org/tomzx/php-semver-checker-git/v/unstable.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
