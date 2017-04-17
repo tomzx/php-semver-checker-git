@@ -3,6 +3,8 @@
 This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
+### Added
+* Let Composer automatically install executable in `vendor/bin`
 
 ## <a name="v0.5.4"></a>v0.5.4 (2017-01-21)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.3...v0.5.4)
