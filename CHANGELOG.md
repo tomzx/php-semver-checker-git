@@ -4,6 +4,14 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
+## <a name="v0.6.0"></a>v0.6.0 (2017-12-09)
+[Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.4...v0.6.0)
+### Added
+* Add support for PHP 7.0/7.1/7.2 during parsing of files
+
+### Changed
+* Update `php-semver-checker` to v0.11.0
+
 ## <a name="v0.5.4"></a>v0.5.4 (2017-01-21)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.5.3...v0.5.4)
 ### Fixed
