@@ -86,23 +86,30 @@ class SuggestCommand extends BaseCommand
 			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
 		}
-
-		// Start with the against commit
-		$repository->checkout($against . ' --');
-
-		$sourceAfter = $finder->findFromString($targetDirectory, $includeAfter, $excludeAfter);
-		$sourceAfterMatchedCount = count($sourceAfter);
-		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
-		$this->scanFileList($afterScanner, $sourceAfter, $output);
-
-		// Finish with the tag commit
-		$repository->checkout($tag . ' --');
-
-		$sourceBefore = $finder->findFromString($targetDirectory, $includeBefore, $excludeBefore);
-		$sourceBeforeMatchedCount = count($sourceBefore);
-		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
-		$this->scanFileList($beforeScanner, $sourceBefore, $output);
-
+		list($sourceAfterMatchedCount, $sourceAfter) = $this->processFileList(
+		    $repository,
+            $against,
+		    $output,
+            $finder,
+            $sourceFilter,
+            $afterScanner,
+            $targetDirectory,
+            $includeAfter,
+            $excludeAfter,
+            $modifiedFiles
+        );
+        list($sourceBeforeMatchedCount, $sourceBefore) = $this->processFileList(
+            $repository,
+            $tag,
+            $output,
+            $finder,
+            $sourceFilter,
+            $beforeScanner,
+            $targetDirectory,
+            $includeBefore,
+            $excludeBefore,
+            $modifiedFiles
+        );
 		// Reset repository to initial branch
 		if ($initialBranch) {
 			$repository->checkout($initialBranch);
@@ -131,6 +138,39 @@ class SuggestCommand extends BaseCommand
 		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)');
 		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
 	}
+
+    /**
+     * @param Repository $repository
+     * @param string $commitIdentifier
+     * @param OutputInterface $output
+     * @param Finder $finder
+     * @param SourceFilter $filter
+     * @param Scanner $scanner
+     * @param $targetDirectory
+     * @param $include
+     * @param $exclude
+     * @param $modifiedFiles
+     * @return array
+     */
+	private function processFileList(
+	    Repository &$repository,
+	    $commitIdentifier,
+	    OutputInterface &$output,
+        Finder &$finder,
+        SourceFilter &$filter,
+        Scanner &$scanner,
+        $targetDirectory,
+        $include,
+        $exclude,
+        $modifiedFiles
+    ) {
+        $repository->checkout($commitIdentifier . ' --');
+        $source = $finder->findFromString($targetDirectory, $include, $exclude);
+        $count = count($source);
+        $source = $filter->filter($source, $modifiedFiles);
+        $this->scanFileList($scanner, $source, $output);
+        return array($count, $source);
+    }
 
     /**
      * @param Scanner $scanner
