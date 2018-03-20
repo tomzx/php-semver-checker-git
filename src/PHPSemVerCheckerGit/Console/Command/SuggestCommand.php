@@ -7,7 +7,6 @@ use Gitter\Repository;
 use PHPSemVerChecker\Analyzer\Analyzer;
 use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Reporter\Reporter;
-use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
 use PHPSemVerCheckerGit\SourceFileProcessor;
@@ -52,6 +51,7 @@ class SuggestCommand extends BaseCommand
 	/**
 	 * @param \Symfony\Component\Console\Input\InputInterface   $input
 	 * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return void
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
@@ -71,9 +71,6 @@ class SuggestCommand extends BaseCommand
 
 		$output->writeln('<info>Testing ' . $against . ' against tag: ' . $tag . '</info>');
 
-		$beforeScanner = new Scanner();
-		$afterScanner = new Scanner();
-
         $sourceFileProcessor = new SourceFileProcessor(
             new SourceFilter(),
             $repository,
@@ -90,14 +87,12 @@ class SuggestCommand extends BaseCommand
 			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
 		}
-		list($sourceAfterMatchedCount, $sourceAfter) = $sourceFileProcessor->processFileList(
-            $afterScanner,
+		$after = $sourceFileProcessor->processFileList(
             $against,
             $this->config->get('include-after'),
             $this->config->get('exclude-after')
         );
-        list($sourceBeforeMatchedCount, $sourceBefore) = $sourceFileProcessor->processFileList(
-            $beforeScanner,
+        $before = $sourceFileProcessor->processFileList(
             $tag,
             $this->config->get('include-before'),
             $this->config->get('exclude-before')
@@ -107,11 +102,8 @@ class SuggestCommand extends BaseCommand
 			$repository->checkout($initialBranch);
 		}
 
-		$registryBefore = $beforeScanner->getRegistry();
-		$registryAfter = $afterScanner->getRegistry();
-
 		$analyzer = new Analyzer();
-		$report = $analyzer->analyze($registryBefore, $registryAfter);
+		$report = $analyzer->analyze($before->getScanner()->getRegistry(), $after->getScanner()->getRegistry());
 
 		$tag = new SemanticVersion($tag);
 		$newTag = $this->getNextTag($report, $tag);
@@ -134,7 +126,7 @@ class SuggestCommand extends BaseCommand
 		$output->write(
 		    array(
 		        '',
-                '[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)',
+                '[Scanned files] Before: ' . count($before->getFiles()) . ' (' . $before->getOriginalAmount() . ' unfiltered), After: ' . count($after->getFiles()) . ' (' . $after->getOriginalAmount() . '  unfiltered)',
                 'Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB'
             ),
             true

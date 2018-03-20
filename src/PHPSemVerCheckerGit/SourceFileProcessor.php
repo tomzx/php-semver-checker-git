@@ -23,6 +23,10 @@ class SourceFileProcessor
      */
     private $finder;
     /**
+     * @var SourceFilter
+     */
+    private $filter;
+    /**
      * @var string
      */
     private $directory;
@@ -45,41 +49,33 @@ class SourceFileProcessor
         $this->repository = $repository;
         $this->output = $output;
         $this->finder = $finder;
+        $this->filter = $filter;
         $this->directory = $directory;
-        $this->addModifiedFiles($modifiedFiles);
-    }
-
-    /**
-     * @param string[] $modified
-     */
-    private function addModifiedFiles(array $modified) {
-        foreach($modified as $file) {
+        foreach($modifiedFiles as $file) {
             if(substr($file, -4) === '.php') {
                 $this->modifiedFiles[] = $file;
             }
         }
     }
 
-
     /**
-     * @param Scanner $scanner
      * @param string $commitIdentifier
      * @param $include
      * @param $exclude
-     * @return array
+     * @return ProcessedFileList
      */
     public function processFileList(
-        Scanner &$scanner,
         $commitIdentifier,
         $include,
         $exclude
     ) {
+        $scanner = new Scanner();
         $this->repository->checkout($commitIdentifier . ' --');
         $source = $this->finder->findFromString($this->directory, $include, $exclude);
         $count = count($source);
         $source = $this->filter->filter($source, $this->modifiedFiles);
         $this->scanFileList($scanner, $source);
-        return array($count, $source);
+        return new ProcessedFileList($count, $source, $scanner);
     }
 
     /**
