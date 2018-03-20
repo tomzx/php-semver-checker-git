@@ -55,7 +55,7 @@ class SuggestCommand extends BaseCommand
      * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+    {
 		$startTime = microtime(true);
 
 		$targetDirectory = getcwd();

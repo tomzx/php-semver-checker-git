@@ -8,8 +8,7 @@ foreach (array(
 	if (file_exists($path)) {
 		require($path);
         $app = new PHPSemVerCheckerGit\Console\Application();
-        $app->run(new PHPSemVerChecker\Console\InspectableArgvInput());
-        exit(0);
+        die($app->run(new PHPSemVerChecker\Console\InspectableArgvInput()));
 	}
 }
 
