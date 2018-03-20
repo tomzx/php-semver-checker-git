@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use vierbergenlars\SemVer\expression as SemanticExpression;
 use vierbergenlars\SemVer\SemVerException as SemanticVersionException;
 use vierbergenlars\SemVer\version as SemanticVersion;
+use PHPSemVerChecker\Report\Report;
 
 class SuggestCommand extends BaseCommand
 {
