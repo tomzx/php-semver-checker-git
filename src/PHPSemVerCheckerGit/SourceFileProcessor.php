@@ -7,6 +7,8 @@ use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Scanner\Scanner;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
+use PHPSemVerCheckerGit\Filter\SourceFilter;
+use Gitter\Repository;
 
 class SourceFileProcessor
 {
