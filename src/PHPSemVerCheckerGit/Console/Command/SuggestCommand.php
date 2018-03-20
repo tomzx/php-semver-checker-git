@@ -18,6 +18,7 @@ use vierbergenlars\SemVer\expression as SemanticExpression;
 use vierbergenlars\SemVer\SemVerException as SemanticVersionException;
 use vierbergenlars\SemVer\version as SemanticVersion;
 use PHPSemVerChecker\Report\Report;
+use vierbergenlars\SemVer\version;
 
 class SuggestCommand extends BaseCommand
 {
