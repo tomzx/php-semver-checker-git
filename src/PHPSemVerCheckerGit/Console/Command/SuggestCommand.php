@@ -18,7 +18,6 @@ use vierbergenlars\SemVer\expression as SemanticExpression;
 use vierbergenlars\SemVer\SemVerException as SemanticVersionException;
 use vierbergenlars\SemVer\version as SemanticVersion;
 use PHPSemVerChecker\Report\Report;
-use vierbergenlars\SemVer\version;
 
 class SuggestCommand extends BaseCommand
 {
@@ -53,7 +52,7 @@ class SuggestCommand extends BaseCommand
 	/**
 	 * @param \Symfony\Component\Console\Input\InputInterface   $input
 	 * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return void
+     * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
@@ -68,7 +67,7 @@ class SuggestCommand extends BaseCommand
 
 		if ($tag === null) {
 			$output->writeln('<error>No tags to suggest against</error>');
-			return;
+			return 1;
 		}
 
 		$output->writeln('<info>Testing ' . $against . ' against tag: ' . $tag . '</info>');
@@ -133,15 +132,15 @@ class SuggestCommand extends BaseCommand
             ),
             true
         );
+		return 0;
 	}
 
     /**
      * @param Report $report
-     * @param version $tag
+     * @param SemanticVersion $tag
      * @return SemanticVersion
-     * @throws \vierbergenlars\SemVer\LogicException
      */
-	private function getNextTag(Report $report, version $tag)
+	private function getNextTag(Report $report, SemanticVersion $tag)
     {
         $newTag = new SemanticVersion($tag);
         $suggestedLevel = $report->getSuggestedLevel();
