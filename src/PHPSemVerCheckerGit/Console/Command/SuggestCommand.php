@@ -48,7 +48,6 @@ class SuggestCommand extends BaseCommand
 		$startTime = microtime(true);
 
 		$targetDirectory = getcwd();
-		$tag = $this->config->get('tag');
 		$against = $this->config->get('against') ?: 'HEAD';
 
 		$includeBefore = $this->config->get('include-before');
@@ -61,11 +60,7 @@ class SuggestCommand extends BaseCommand
 
 		$repository = $client->getRepository($targetDirectory);
 
-		if ($tag === null) {
-			$tag = $this->findLatestTag($repository);
-		} else {
-			$tag = $this->findTag($repository, $tag);
-		}
+		$tag = $this->getInitialTag($repository);
 
 		if ($tag === null) {
 			$output->writeln('<error>No tags to suggest against</error>');
@@ -98,13 +93,7 @@ class SuggestCommand extends BaseCommand
 		$sourceAfter = $finder->findFromString($targetDirectory, $includeAfter, $excludeAfter);
 		$sourceAfterMatchedCount = count($sourceAfter);
 		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
-		$progress = new ProgressBar($output, count($sourceAfter));
-		foreach ($sourceAfter as $file) {
-			$afterScanner->scan($file);
-			$progress->advance();
-		}
-
-		$progress->clear();
+		$this->scanFileList($afterScanner, $sourceAfter, $output);
 
 		// Finish with the tag commit
 		$repository->checkout($tag . ' --');
@@ -112,13 +101,7 @@ class SuggestCommand extends BaseCommand
 		$sourceBefore = $finder->findFromString($targetDirectory, $includeBefore, $excludeBefore);
 		$sourceBeforeMatchedCount = count($sourceBefore);
 		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
-		$progress = new ProgressBar($output, count($sourceBefore));
-		foreach ($sourceBefore as $file) {
-			$beforeScanner->scan($file);
-			$progress->advance();
-		}
-
-		$progress->clear();
+		$this->scanFileList($beforeScanner, $sourceBefore, $output);
 
 		// Reset repository to initial branch
 		if ($initialBranch) {
@@ -132,21 +115,7 @@ class SuggestCommand extends BaseCommand
 		$report = $analyzer->analyze($registryBefore, $registryAfter);
 
 		$tag = new SemanticVersion($tag);
-		$newTag = new SemanticVersion($tag);
-
-		$suggestedLevel = $report->getSuggestedLevel();
-
-		if ($suggestedLevel !== Level::NONE) {
-			if ($newTag->getPrerelease()) {
-				$newTag->inc('prerelease');
-			} else {
-				if ($newTag->getMajor() < 1 && $suggestedLevel === Level::MAJOR) {
-					$newTag->inc('minor');
-				} else {
-					$newTag->inc(strtolower(Level::toString($suggestedLevel)));
-				}
-			}
-		}
+		$newTag = $this->getNextTag($report, $tag);
 
 		$output->writeln('');
 		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
@@ -162,6 +131,59 @@ class SuggestCommand extends BaseCommand
 		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)');
 		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
 	}
+
+    /**
+     * @param Scanner $scanner
+     * @param array $files
+     * @param OutputInterface $output
+     */
+	private function scanFileList(Scanner &$scanner, array &$files, OutputInterface &$output)
+    {
+        $progress = new ProgressBar($output, count($files));
+        foreach ($files as $file) {
+            $scanner->scan($file);
+            $progress->advance();
+        }
+        $progress->clear();
+    }
+
+    /**
+     * @param Report $report
+     * @param version $tag
+     * @return SemanticVersion
+     * @throws \vierbergenlars\SemVer\LogicException
+     */
+	private function getNextTag(Report $report, version $tag)
+    {
+        $newTag = new SemanticVersion($tag);
+        $suggestedLevel = $report->getSuggestedLevel();
+        if ($suggestedLevel === Level::NONE) {
+            return $newTag;
+        }
+        if ($newTag->getPrerelease()) {
+            $newTag->inc('prerelease');
+            return $newTag;
+        }
+        if ($newTag->getMajor() < 1 && $suggestedLevel === Level::MAJOR) {
+            $newTag->inc('minor');
+            return $newTag;
+        }
+        $newTag->inc(strtolower(Level::toString($suggestedLevel)));
+        return $newTag;
+    }
+
+    /**
+     * @param Repository $repository
+     * @return null|string
+     */
+	private function getInitialTag(Repository $repository)
+    {
+        $tag = $this->config->get('tag');
+        if ($tag === null) {
+            return $this->findLatestTag($repository);
+        }
+        return $this->findTag($repository, $tag);
+    }
 
 	/**
 	 * @param \Gitter\Repository $repository
