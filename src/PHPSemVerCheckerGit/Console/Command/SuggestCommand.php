@@ -10,8 +10,8 @@ use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
+use PHPSemVerCheckerGit\SourceFileProcessor;
 use RuntimeException;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,6 +39,16 @@ class SuggestCommand extends BaseCommand
 		]);
 	}
 
+    /**
+     * @param string $directory
+     * @return Repository
+     */
+	private function getRepository($directory)
+    {
+        $client = new Client();
+        return $client->getRepository($directory);
+    }
+
 	/**
 	 * @param \Symfony\Component\Console\Input\InputInterface   $input
 	 * @param \Symfony\Component\Console\Output\OutputInterface $output
@@ -50,15 +60,7 @@ class SuggestCommand extends BaseCommand
 		$targetDirectory = getcwd();
 		$against = $this->config->get('against') ?: 'HEAD';
 
-		$includeBefore = $this->config->get('include-before');
-		$excludeBefore = $this->config->get('exclude-before');
-
-		$includeAfter = $this->config->get('include-after');
-		$excludeAfter = $this->config->get('exclude-after');
-
-		$client = new Client();
-
-		$repository = $client->getRepository($targetDirectory);
+		$repository = $this->getRepository($targetDirectory);
 
 		$tag = $this->getInitialTag($repository);
 
@@ -69,15 +71,17 @@ class SuggestCommand extends BaseCommand
 
 		$output->writeln('<info>Testing ' . $against . ' against tag: ' . $tag . '</info>');
 
-		$finder = new Finder();
-		$sourceFilter = new SourceFilter();
 		$beforeScanner = new Scanner();
 		$afterScanner = new Scanner();
 
-		$modifiedFiles = $repository->getModifiedFiles($tag, $against);
-		$modifiedFiles = array_filter($modifiedFiles, function ($modifiedFile) {
-			return substr($modifiedFile, -4) === '.php';
-		});
+        $sourceFileProcessor = new SourceFileProcessor(
+            new SourceFilter(),
+            $repository,
+            $output,
+            new Finder(),
+            $targetDirectory,
+            $repository->getModifiedFiles($tag, $against)
+        );
 
 		$initialBranch = $repository->getCurrentBranch();
 
@@ -86,29 +90,17 @@ class SuggestCommand extends BaseCommand
 			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
 		}
-		list($sourceAfterMatchedCount, $sourceAfter) = $this->processFileList(
-		    $repository,
-            $against,
-		    $output,
-            $finder,
-            $sourceFilter,
+		list($sourceAfterMatchedCount, $sourceAfter) = $sourceFileProcessor->processFileList(
             $afterScanner,
-            $targetDirectory,
-            $includeAfter,
-            $excludeAfter,
-            $modifiedFiles
+            $against,
+            $this->config->get('include-after'),
+            $this->config->get('exclude-after')
         );
-        list($sourceBeforeMatchedCount, $sourceBefore) = $this->processFileList(
-            $repository,
-            $tag,
-            $output,
-            $finder,
-            $sourceFilter,
+        list($sourceBeforeMatchedCount, $sourceBefore) = $sourceFileProcessor->processFileList(
             $beforeScanner,
-            $targetDirectory,
-            $includeBefore,
-            $excludeBefore,
-            $modifiedFiles
+            $tag,
+            $this->config->get('include-before'),
+            $this->config->get('exclude-before')
         );
 		// Reset repository to initial branch
 		if ($initialBranch) {
@@ -124,9 +116,14 @@ class SuggestCommand extends BaseCommand
 		$tag = new SemanticVersion($tag);
 		$newTag = $this->getNextTag($report, $tag);
 
-		$output->writeln('');
-		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
-		$output->writeln('<info>Suggested semantic version: ' . $newTag . '</info>');
+		$output->write(
+		    array(
+                '',
+                '<info>Initial semantic version: ' . $tag . '</info>',
+                '<info>Suggested semantic version: ' . $newTag . '</info>'
+            ),
+            true
+        );
 
 		if ($this->config->get('details')) {
 			$reporter = new Reporter($report);
@@ -134,58 +131,15 @@ class SuggestCommand extends BaseCommand
 		}
 
 		$duration = microtime(true) - $startTime;
-		$output->writeln('');
-		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)');
-		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
+		$output->write(
+		    array(
+		        '',
+                '[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)',
+                'Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB'
+            ),
+            true
+        );
 	}
-
-    /**
-     * @param Repository $repository
-     * @param string $commitIdentifier
-     * @param OutputInterface $output
-     * @param Finder $finder
-     * @param SourceFilter $filter
-     * @param Scanner $scanner
-     * @param $targetDirectory
-     * @param $include
-     * @param $exclude
-     * @param $modifiedFiles
-     * @return array
-     */
-	private function processFileList(
-	    Repository &$repository,
-	    $commitIdentifier,
-	    OutputInterface &$output,
-        Finder &$finder,
-        SourceFilter &$filter,
-        Scanner &$scanner,
-        $targetDirectory,
-        $include,
-        $exclude,
-        $modifiedFiles
-    ) {
-        $repository->checkout($commitIdentifier . ' --');
-        $source = $finder->findFromString($targetDirectory, $include, $exclude);
-        $count = count($source);
-        $source = $filter->filter($source, $modifiedFiles);
-        $this->scanFileList($scanner, $source, $output);
-        return array($count, $source);
-    }
-
-    /**
-     * @param Scanner $scanner
-     * @param array $files
-     * @param OutputInterface $output
-     */
-	private function scanFileList(Scanner &$scanner, array &$files, OutputInterface &$output)
-    {
-        $progress = new ProgressBar($output, count($files));
-        foreach ($files as $file) {
-            $scanner->scan($file);
-            $progress->advance();
-        }
-        $progress->clear();
-    }
 
     /**
      * @param Report $report
