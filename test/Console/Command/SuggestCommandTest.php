@@ -32,6 +32,11 @@ class SuggestCommandTest extends TestCase
             array(Level::PATCH, $this->getMockedVersion(0,1,0), '0.1.1'),
             array(Level::MINOR, $this->getMockedVersion(0,1,0), '0.2.0'),
             array(Level::MAJOR, $this->getMockedVersion(0,1,0), '0.2.0'),
+            //v1.0.0RC1
+            array(Level::NONE, $this->getMockedVersion(1,0,'0-1'), '1.0.0-1'),
+            array(Level::PATCH, $this->getMockedVersion(1,0,'0-1'), '1.0.0-2'),
+            array(Level::MINOR, $this->getMockedVersion(1,0,'0-1'), '1.0.0-2'),
+            array(Level::MAJOR, $this->getMockedVersion(1,0,'0-1'), '1.0.0-2'),
             //v1.0.0
             array(Level::NONE, $this->getMockedVersion(1,0,0), '1.0.0'),
             array(Level::PATCH, $this->getMockedVersion(1,0,0), '1.0.1'),
