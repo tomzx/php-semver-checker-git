@@ -9,11 +9,23 @@ class ProcessedFileList
     /**
      * @var int
      */
-    private $originalAmount;
+    private $unfilteredAmount;
+
+    /**
+     * @var int
+     */
+    private $filteredAmount;
+
     /**
      * @var string[]
      */
-    private $files;
+    private $filtered;
+
+    /**
+     * @var string[]
+     */
+    private $unfiltered;
+
     /**
      * @var Scanner
      */
@@ -21,14 +33,16 @@ class ProcessedFileList
 
     /**
      * ProcessedFileList constructor.
-     * @param int $originalAmount
-     * @param string[] $files
+     * @param string[] $unfiltered
+     * @param string[] $filtered
      * @param Scanner $scanner
      */
-    public function __construct($originalAmount, array &$files, Scanner &$scanner)
+    public function __construct(array $unfiltered, array $filtered, Scanner &$scanner)
     {
-        $this->originalAmount = $originalAmount;
-        $this->files = $files;
+        $this->unfilteredAmount = count($unfiltered);
+        $this->filteredAmount = count($filtered);
+        $this->filtered = $filtered;
+        $this->unfiltered = $unfiltered;
         $this->scanner = $scanner;
     }
 
@@ -41,19 +55,34 @@ class ProcessedFileList
     }
 
     /**
+     * @return string[]
+     */
+    public function getFiltered()
+    {
+        return $this->filtered;
+    }
+
+    /**
      * @return int
      */
-    public function getOriginalAmount()
+    public function getFilteredAmount()
     {
-        return $this->originalAmount;
+        return $this->filteredAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnfilteredAmount()
+    {
+        return $this->unfilteredAmount;
     }
 
     /**
      * @return string[]
      */
-    public function getFiles()
+    public function getUnfiltered()
     {
-        return $this->files;
+        return $this->unfiltered;
     }
-
 }

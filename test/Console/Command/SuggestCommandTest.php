@@ -2,9 +2,12 @@
 
 namespace PHPSemVerCheckerGit\Test;
 
+use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Console\Command\SuggestCommand;
 use PHPUnit\Framework\TestCase;
-use PHPSemVerChecker\SemanticVersioning\Level;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use vierbergenlars\SemVer\version;
 
 class SuggestCommandTest extends TestCase
@@ -19,6 +22,18 @@ class SuggestCommandTest extends TestCase
     private function getMockedVersion($major, $minor, $patch)
     {
         return new version("$major.$minor.$patch", true);
+    }
+
+    /**
+     * @return ReflectionMethod
+     * @throws ReflectionException
+     */
+    private function getNextTagMethod()
+    {
+        $class = new ReflectionClass('PHPSemVerCheckerGit\Console\Command\SuggestCommand');
+        $method = $class->getMethod('getNextTag');
+        $method->setAccessible(true);
+        return $method;
     }
 
     /**
@@ -54,18 +69,16 @@ class SuggestCommandTest extends TestCase
      * @param $level
      * @param $version
      * @param $expected
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @test
      * @dataProvider provideGetNextTag
      */
-    public function testGetNextTag($level, version $version, $expected) {
+    public function testGetNextTag($level, version $version, $expected)
+    {
         $report = $this->getMockBuilder('PHPSemVerChecker\Report\Report')->disableOriginalConstructor()->getMock();
         $report->expects($this->once())->method('getSuggestedLevel')->willReturn($level);
-        $instance = new SuggestCommand();
-        $rc = new \ReflectionClass('PHPSemVerCheckerGit\Console\Command\SuggestCommand');
-        $method = $rc->getMethod('getNextTag');
-        $method->setAccessible(true);
-        $result = $method->invoke($instance, $report, $version);
+
+        $result = $this->getNextTagMethod()->invoke(new SuggestCommand(), $report, $version);
         $this->assertInstanceOf('vierbergenlars\SemVer\version', $result);
         $this->assertEquals($expected, $result->getVersion());
     }

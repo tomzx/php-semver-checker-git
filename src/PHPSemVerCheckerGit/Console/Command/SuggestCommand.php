@@ -5,7 +5,9 @@ namespace PHPSemVerCheckerGit\Console\Command;
 use Gitter\Client;
 use Gitter\Repository;
 use PHPSemVerChecker\Analyzer\Analyzer;
+use PHPSemVerChecker\Console\Command\BaseCommand;
 use PHPSemVerChecker\Finder\Finder;
+use PHPSemVerChecker\Report\Report;
 use PHPSemVerChecker\Reporter\Reporter;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
@@ -17,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use vierbergenlars\SemVer\expression as SemanticExpression;
 use vierbergenlars\SemVer\SemVerException as SemanticVersionException;
 use vierbergenlars\SemVer\version as SemanticVersion;
-use PHPSemVerChecker\Report\Report;
 
 class SuggestCommand extends BaseCommand
 {
@@ -50,8 +51,8 @@ class SuggestCommand extends BaseCommand
     }
 
 	/**
-	 * @param \Symfony\Component\Console\Input\InputInterface   $input
-	 * @param \Symfony\Component\Console\Output\OutputInterface $output
+	 * @param InputInterface   $input
+	 * @param OutputInterface $output
      * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -127,7 +128,7 @@ class SuggestCommand extends BaseCommand
 		$output->write(
 		    array(
 		        '',
-                '[Scanned files] Before: ' . count($before->getFiles()) . ' (' . $before->getOriginalAmount() . ' unfiltered), After: ' . count($after->getFiles()) . ' (' . $after->getOriginalAmount() . '  unfiltered)',
+                '[Scanned files] Before: ' . $before->getFilteredAmount() . ' (' . $before->getUnfilteredAmount() . ' unfiltered), After: ' . $after->getFilteredAmount() . ' (' . $after->getUnfilteredAmount() . '  unfiltered)',
                 'Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB'
             ),
             true
@@ -173,7 +174,7 @@ class SuggestCommand extends BaseCommand
     }
 
 	/**
-	 * @param \Gitter\Repository $repository
+	 * @param Repository $repository
 	 * @return string|null
 	 */
 	protected function findLatestTag(Repository $repository)
@@ -182,7 +183,7 @@ class SuggestCommand extends BaseCommand
 	}
 
 	/**
-	 * @param \Gitter\Repository $repository
+	 * @param Repository $repository
 	 * @param string             $tag
 	 * @return string|null
 	 */
@@ -219,7 +220,7 @@ class SuggestCommand extends BaseCommand
 
 	/**
 	 * @param string[]                                   $tags
-	 * @param \vierbergenlars\SemVer\version|string|null $versionTag
+	 * @param SemanticVersion|string|null $versionTag
 	 * @return string|null
 	 */
 	private function getMappedVersionTag(array $tags, $versionTag)

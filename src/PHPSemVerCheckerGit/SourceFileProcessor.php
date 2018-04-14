@@ -66,25 +66,21 @@ class SourceFileProcessor
      * @param $exclude
      * @return ProcessedFileList
      */
-    public function processFileList(
-        $commitIdentifier,
-        $include,
-        $exclude
-    ) {
+    public function processFileList($commitIdentifier, $include, $exclude)
+    {
         $scanner = new Scanner();
         $this->repository->checkout($commitIdentifier . ' --');
-        $source = $this->finder->findFromString($this->directory, $include, $exclude);
-        $count = count($source);
+        $unfiltered = $this->finder->findFromString($this->directory, $include, $exclude);
         $source = $this->filter->filter($source, $this->modifiedFiles);
         $this->scanFileList($scanner, $source);
-        return new ProcessedFileList($count, $source, $scanner);
+        return new ProcessedFileList($unfiltered, $source, $scanner);
     }
 
     /**
      * @param Scanner $scanner
      * @param array $files
      */
-    private function scanFileList(Scanner &$scanner, array &$files)
+    private function scanFileList(Scanner $scanner, array $files)
     {
         $progress = new ProgressBar($this->output, count($files));
         foreach ($files as $file) {
@@ -93,5 +89,4 @@ class SourceFileProcessor
         }
         $progress->clear();
     }
-
 }
