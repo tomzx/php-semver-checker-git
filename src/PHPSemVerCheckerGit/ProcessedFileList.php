@@ -9,12 +9,12 @@ class ProcessedFileList
     /**
      * @var int
      */
-    private $unfilteredAmount;
+    private $unfilteredCount;
 
     /**
      * @var int
      */
-    private $filteredAmount;
+    private $filteredCount;
 
     /**
      * @var string[]
@@ -27,7 +27,7 @@ class ProcessedFileList
     private $unfiltered;
 
     /**
-     * @var Scanner
+     * @var \PHPSemVerChecker\Scanner\Scanner
      */
     private $scanner;
 
@@ -35,19 +35,19 @@ class ProcessedFileList
      * ProcessedFileList constructor.
      * @param string[] $unfiltered
      * @param string[] $filtered
-     * @param Scanner $scanner
+     * @param \PHPSemVerChecker\Scanner\Scanner $scanner
      */
     public function __construct(array $unfiltered, array $filtered, Scanner &$scanner)
     {
-        $this->unfilteredAmount = count($unfiltered);
-        $this->filteredAmount = count($filtered);
+        $this->unfilteredCount = count($unfiltered);
+        $this->filteredCount = count($filtered);
         $this->filtered = $filtered;
         $this->unfiltered = $unfiltered;
         $this->scanner = $scanner;
     }
 
     /**
-     * @return Scanner
+     * @return \PHPSemVerChecker\Scanner\Scanner
      */
     public function getScanner()
     {
@@ -65,17 +65,17 @@ class ProcessedFileList
     /**
      * @return int
      */
-    public function getFilteredAmount()
+    public function getFilteredCount()
     {
-        return $this->filteredAmount;
+        return $this->filteredCount;
     }
 
     /**
      * @return int
      */
-    public function getUnfilteredAmount()
+    public function getUnfilteredCount()
     {
-        return $this->unfilteredAmount;
+        return $this->unfilteredCount;
     }
 
     /**

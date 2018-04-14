@@ -41,7 +41,7 @@ class SuggestCommand extends BaseCommand
 
     /**
      * @param string $directory
-     * @return Repository
+     * @return \Gitter\Repository
      */
 	private function getRepository($directory)
     {
@@ -49,11 +49,11 @@ class SuggestCommand extends BaseCommand
         return $client->getRepository($directory);
     }
 
-	/**
-	 * @param InputInterface   $input
-	 * @param OutputInterface $output
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
-	 */
+     */
 	protected function execute(InputInterface $input, OutputInterface $output)
     {
 		$startTime = microtime(true);
@@ -127,7 +127,7 @@ class SuggestCommand extends BaseCommand
 		$output->write(
 		    array(
 		        '',
-                '[Scanned files] Before: ' . $before->getFilteredAmount() . ' (' . $before->getUnfilteredAmount() . ' unfiltered), After: ' . $after->getFilteredAmount() . ' (' . $after->getUnfilteredAmount() . '  unfiltered)',
+                '[Scanned files] Before: ' . $before->getFilteredCount() . ' (' . $before->getUnfilteredCount() . ' unfiltered), After: ' . $after->getFilteredCount() . ' (' . $after->getUnfilteredCount() . '  unfiltered)',
                 'Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB'
             ),
             true
@@ -136,7 +136,7 @@ class SuggestCommand extends BaseCommand
 	}
 
     /**
-     * @param Report $report
+     * @param \PHPSemVerChecker\Report\Report $report
      * @param SemanticVersion $tag
      * @return SemanticVersion
      */
@@ -160,7 +160,7 @@ class SuggestCommand extends BaseCommand
     }
 
     /**
-     * @param Repository $repository
+     * @param \Gitter\Repository $repository
      * @return null|string
      */
 	private function getInitialTag(Repository $repository)
@@ -173,7 +173,7 @@ class SuggestCommand extends BaseCommand
     }
 
 	/**
-	 * @param Repository $repository
+	 * @param \Gitter\Repository $repository
 	 * @return string|null
 	 */
 	protected function findLatestTag(Repository $repository)
@@ -182,7 +182,7 @@ class SuggestCommand extends BaseCommand
 	}
 
 	/**
-	 * @param Repository $repository
+	 * @param \Gitter\Repository $repository
 	 * @param string             $tag
 	 * @return string|null
 	 */
@@ -203,6 +203,10 @@ class SuggestCommand extends BaseCommand
 		return $this->getMappedVersionTag($tags, $satisfyingTag);
 	}
 
+    /**
+     * @param array $tags
+     * @return array
+     */
 	private function filterTags(array $tags)
 	{
 		$filteredTags = [];
@@ -218,7 +222,7 @@ class SuggestCommand extends BaseCommand
 	}
 
 	/**
-	 * @param string[]                                   $tags
+	 * @param string[] $tags
 	 * @param SemanticVersion|string|null $versionTag
 	 * @return string|null
 	 */

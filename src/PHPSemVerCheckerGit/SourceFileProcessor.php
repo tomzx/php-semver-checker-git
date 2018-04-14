@@ -2,36 +2,40 @@
 
 namespace PHPSemVerCheckerGit;
 
-
+use Gitter\Repository;
 use PHPSemVerChecker\Finder\Finder;
 use PHPSemVerChecker\Scanner\Scanner;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
-use Gitter\Repository;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SourceFileProcessor
 {
     /**
-     * @var Repository
+     * @var \Gitter\Repository
      */
     private $repository;
+
     /**
-     * @var OutputInterface
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
+
     /**
-     * @var Finder
+     * @var \PHPSemVerChecker\Finder\Finder
      */
     private $finder;
+
     /**
-     * @var SourceFilter
+     * @var \PHPSemVerCheckerGit\Filter\SourceFilter
      */
     private $filter;
+
     /**
      * @var string
      */
     private $directory;
+
     /**
      * @var string[]
      */
@@ -39,10 +43,10 @@ class SourceFileProcessor
 
     /**
      * SourceFileProcessor constructor.
-     * @param SourceFilter &$filter
-     * @param Repository $repository
-     * @param OutputInterface $output
-     * @param Finder $finder
+     * @param PHPSemVerCheckerGit\Filter\SourceFilter $filter
+     * @param \Gitter\Repository $repository
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \PHPSemVerChecker\Finder\Finder $finder
      * @param string $directory
      * @param string[] $modifiedFiles
      */
@@ -64,7 +68,7 @@ class SourceFileProcessor
      * @param string $commitIdentifier
      * @param $include
      * @param $exclude
-     * @return ProcessedFileList
+     * @return \PHPSemVerCheckerGit\ProcessedFileList
      */
     public function processFileList($commitIdentifier, $include, $exclude)
     {
@@ -77,7 +81,7 @@ class SourceFileProcessor
     }
 
     /**
-     * @param Scanner $scanner
+     * @param \PHPSemVerChecker\Scanner\Scanner $scanner
      * @param array $files
      */
     private function scanFileList(Scanner $scanner, array $files)

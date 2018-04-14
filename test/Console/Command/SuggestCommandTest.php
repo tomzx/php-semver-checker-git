@@ -6,8 +6,6 @@ use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Console\Command\SuggestCommand;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
 use vierbergenlars\SemVer\version;
 
 class SuggestCommandTest extends TestCase
@@ -17,7 +15,7 @@ class SuggestCommandTest extends TestCase
      * @param int $major
      * @param int $minor
      * @param int $patch
-     * @return version
+     * @return \vierbergenlars\SemVer\version
      */
     private function getMockedVersion($major, $minor, $patch)
     {
@@ -25,8 +23,8 @@ class SuggestCommandTest extends TestCase
     }
 
     /**
-     * @return ReflectionMethod
-     * @throws ReflectionException
+     * @return \ReflectionMethod
+     * @throws \ReflectionException
      */
     private function getNextTagMethod()
     {
@@ -67,9 +65,9 @@ class SuggestCommandTest extends TestCase
 
     /**
      * @param $level
-     * @param $version
+     * @param \vierbergenlars\SemVer\version $version
      * @param $expected
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @test
      * @dataProvider provideGetNextTag
      */
