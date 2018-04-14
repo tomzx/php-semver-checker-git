@@ -71,7 +71,7 @@ class SourceFileProcessor
         $scanner = new Scanner();
         $this->repository->checkout($commitIdentifier . ' --');
         $unfiltered = $this->finder->findFromString($this->directory, $include, $exclude);
-        $source = $this->filter->filter($source, $this->modifiedFiles);
+        $source = $this->filter->filter($unfiltered, $this->modifiedFiles);
         $this->scanFileList($scanner, $source);
         return new ProcessedFileList($unfiltered, $source, $scanner);
     }
