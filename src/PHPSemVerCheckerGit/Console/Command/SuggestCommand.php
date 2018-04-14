@@ -6,12 +6,12 @@ use Gitter\Client;
 use Gitter\Repository;
 use PHPSemVerChecker\Analyzer\Analyzer;
 use PHPSemVerChecker\Finder\Finder;
+use PHPSemVerChecker\Report\Report;
 use PHPSemVerChecker\Reporter\Reporter;
-use PHPSemVerChecker\Scanner\Scanner;
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Filter\SourceFilter;
+use PHPSemVerCheckerGit\SourceFileProcessor;
 use RuntimeException;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,50 +39,47 @@ class SuggestCommand extends BaseCommand
 		]);
 	}
 
-	/**
-	 * @param \Symfony\Component\Console\Input\InputInterface   $input
-	 * @param \Symfony\Component\Console\Output\OutputInterface $output
-	 */
+    /**
+     * @param string $directory
+     * @return \Gitter\Repository
+     */
+	private function getRepository($directory)
+    {
+        $client = new Client();
+        return $client->getRepository($directory);
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
+     */
 	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+    {
 		$startTime = microtime(true);
 
 		$targetDirectory = getcwd();
-		$tag = $this->config->get('tag');
 		$against = $this->config->get('against') ?: 'HEAD';
 
-		$includeBefore = $this->config->get('include-before');
-		$excludeBefore = $this->config->get('exclude-before');
+		$repository = $this->getRepository($targetDirectory);
 
-		$includeAfter = $this->config->get('include-after');
-		$excludeAfter = $this->config->get('exclude-after');
-
-		$client = new Client();
-
-		$repository = $client->getRepository($targetDirectory);
-
-		if ($tag === null) {
-			$tag = $this->findLatestTag($repository);
-		} else {
-			$tag = $this->findTag($repository, $tag);
-		}
+		$tag = $this->getInitialTag($repository);
 
 		if ($tag === null) {
 			$output->writeln('<error>No tags to suggest against</error>');
-			return;
+			return 1;
 		}
 
 		$output->writeln('<info>Testing ' . $against . ' against tag: ' . $tag . '</info>');
 
-		$finder = new Finder();
-		$sourceFilter = new SourceFilter();
-		$beforeScanner = new Scanner();
-		$afterScanner = new Scanner();
-
-		$modifiedFiles = $repository->getModifiedFiles($tag, $against);
-		$modifiedFiles = array_filter($modifiedFiles, function ($modifiedFile) {
-			return substr($modifiedFile, -4) === '.php';
-		});
+        $sourceFileProcessor = new SourceFileProcessor(
+            new SourceFilter(),
+            $repository,
+            $output,
+            new Finder(),
+            $targetDirectory,
+            $repository->getModifiedFiles($tag, $against)
+        );
 
 		$initialBranch = $repository->getCurrentBranch();
 
@@ -91,66 +88,35 @@ class SuggestCommand extends BaseCommand
 			$output->writeln('<info>If you still wish to run against a detached HEAD, use --allow-detached.</info>');
 			return -1;
 		}
-
-		// Start with the against commit
-		$repository->checkout($against . ' --');
-
-		$sourceAfter = $finder->findFromString($targetDirectory, $includeAfter, $excludeAfter);
-		$sourceAfterMatchedCount = count($sourceAfter);
-		$sourceAfter = $sourceFilter->filter($sourceAfter, $modifiedFiles);
-		$progress = new ProgressBar($output, count($sourceAfter));
-		foreach ($sourceAfter as $file) {
-			$afterScanner->scan($file);
-			$progress->advance();
-		}
-
-		$progress->clear();
-
-		// Finish with the tag commit
-		$repository->checkout($tag . ' --');
-
-		$sourceBefore = $finder->findFromString($targetDirectory, $includeBefore, $excludeBefore);
-		$sourceBeforeMatchedCount = count($sourceBefore);
-		$sourceBefore = $sourceFilter->filter($sourceBefore, $modifiedFiles);
-		$progress = new ProgressBar($output, count($sourceBefore));
-		foreach ($sourceBefore as $file) {
-			$beforeScanner->scan($file);
-			$progress->advance();
-		}
-
-		$progress->clear();
-
+		$after = $sourceFileProcessor->processFileList(
+            $against,
+            $this->config->get('include-after'),
+            $this->config->get('exclude-after')
+        );
+        $before = $sourceFileProcessor->processFileList(
+            $tag,
+            $this->config->get('include-before'),
+            $this->config->get('exclude-before')
+        );
 		// Reset repository to initial branch
 		if ($initialBranch) {
 			$repository->checkout($initialBranch);
 		}
 
-		$registryBefore = $beforeScanner->getRegistry();
-		$registryAfter = $afterScanner->getRegistry();
-
 		$analyzer = new Analyzer();
-		$report = $analyzer->analyze($registryBefore, $registryAfter);
+		$report = $analyzer->analyze($before->getScanner()->getRegistry(), $after->getScanner()->getRegistry());
 
 		$tag = new SemanticVersion($tag);
-		$newTag = new SemanticVersion($tag);
+		$newTag = $this->getNextTag($report, $tag);
 
-		$suggestedLevel = $report->getSuggestedLevel();
-
-		if ($suggestedLevel !== Level::NONE) {
-			if ($newTag->getPrerelease()) {
-				$newTag->inc('prerelease');
-			} else {
-				if ($newTag->getMajor() < 1 && $suggestedLevel === Level::MAJOR) {
-					$newTag->inc('minor');
-				} else {
-					$newTag->inc(strtolower(Level::toString($suggestedLevel)));
-				}
-			}
-		}
-
-		$output->writeln('');
-		$output->writeln('<info>Initial semantic version: ' . $tag . '</info>');
-		$output->writeln('<info>Suggested semantic version: ' . $newTag . '</info>');
+		$output->write(
+		    array(
+                '',
+                '<info>Initial semantic version: ' . $tag . '</info>',
+                '<info>Suggested semantic version: ' . $newTag . '</info>'
+            ),
+            true
+        );
 
 		if ($this->config->get('details')) {
 			$reporter = new Reporter($report);
@@ -158,10 +124,53 @@ class SuggestCommand extends BaseCommand
 		}
 
 		$duration = microtime(true) - $startTime;
-		$output->writeln('');
-		$output->writeln('[Scanned files] Before: ' . count($sourceBefore) . ' (' . $sourceBeforeMatchedCount . ' unfiltered), After: ' . count($sourceAfter) . ' (' . $sourceAfterMatchedCount . '  unfiltered)');
-		$output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
+		$output->write(
+		    array(
+		        '',
+                '[Scanned files] Before: ' . $before->getFilteredCount() . ' (' . $before->getUnfilteredCount() . ' unfiltered), After: ' . $after->getFilteredCount() . ' (' . $after->getUnfilteredCount() . '  unfiltered)',
+                'Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB'
+            ),
+            true
+        );
+		return 0;
 	}
+
+    /**
+     * @param \PHPSemVerChecker\Report\Report $report
+     * @param SemanticVersion $tag
+     * @return SemanticVersion
+     */
+	private function getNextTag(Report $report, SemanticVersion $tag)
+    {
+        $newTag = new SemanticVersion($tag);
+        $suggestedLevel = $report->getSuggestedLevel();
+        if ($suggestedLevel === Level::NONE) {
+            return $newTag;
+        }
+        if ($newTag->getPrerelease()) {
+            $newTag->inc('prerelease');
+            return $newTag;
+        }
+        if ($newTag->getMajor() < 1 && $suggestedLevel === Level::MAJOR) {
+            $newTag->inc('minor');
+            return $newTag;
+        }
+        $newTag->inc(strtolower(Level::toString($suggestedLevel)));
+        return $newTag;
+    }
+
+    /**
+     * @param \Gitter\Repository $repository
+     * @return null|string
+     */
+	private function getInitialTag(Repository $repository)
+    {
+        $tag = $this->config->get('tag');
+        if ($tag === null) {
+            return $this->findLatestTag($repository);
+        }
+        return $this->findTag($repository, $tag);
+    }
 
 	/**
 	 * @param \Gitter\Repository $repository
@@ -194,6 +203,10 @@ class SuggestCommand extends BaseCommand
 		return $this->getMappedVersionTag($tags, $satisfyingTag);
 	}
 
+    /**
+     * @param array $tags
+     * @return array
+     */
 	private function filterTags(array $tags)
 	{
 		$filteredTags = [];
@@ -209,8 +222,8 @@ class SuggestCommand extends BaseCommand
 	}
 
 	/**
-	 * @param string[]                                   $tags
-	 * @param \vierbergenlars\SemVer\version|string|null $versionTag
+	 * @param string[] $tags
+	 * @param SemanticVersion|string|null $versionTag
 	 * @return string|null
 	 */
 	private function getMappedVersionTag(array $tags, $versionTag)

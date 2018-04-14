@@ -35,8 +35,7 @@
 		"vierbergenlars/php-semver": "^3.0"
 	},
 	"require-dev": {
-		"mockery/mockery": "^1.0",
-		"phpunit/phpunit": "^4.0|^5.0"
+		"phpunit/phpunit": "^4.8.36|^5.7.27"
 	},
 	"bin": [
 		"bin/php-semver-checker-git"
@@ -48,7 +47,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"PHPSemVerCheckerGit\\Test\\": "tests/PHPSemVerCheckerGit"
+			"PHPSemVerCheckerGit\\Test\\": "test"
 		}
 	},
 	"config": {
