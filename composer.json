@@ -48,7 +48,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"PHPSemVerCheckerGit\\Test\\": "tests/PHPSemVerCheckerGit"
+			"PHPSemVerCheckerGit\\Tests\\": "tests/PHPSemVerCheckerGit"
 		}
 	},
 	"config": {
