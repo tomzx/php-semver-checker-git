@@ -37,7 +37,7 @@ class ProcessedFileList
      * @param string[] $filtered
      * @param \PHPSemVerChecker\Scanner\Scanner $scanner
      */
-    public function __construct(array $unfiltered, array $filtered, Scanner &$scanner)
+    public function __construct(array $unfiltered, array $filtered, Scanner $scanner)
     {
         $this->unfilteredCount = count($unfiltered);
         $this->filteredCount = count($filtered);
