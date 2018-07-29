@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPSemVerCheckerGit\Test;
+namespace PHPSemVerCheckerGit\Tests;
 
 use PHPSemVerChecker\SemanticVersioning\Level;
 use PHPSemVerCheckerGit\Console\Command\SuggestCommand;
