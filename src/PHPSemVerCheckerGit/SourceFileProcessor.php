@@ -57,6 +57,7 @@ class SourceFileProcessor
         $this->finder = $finder;
         $this->filter = $filter;
         $this->directory = $directory;
+        $this->modifiedFiles = [];
         foreach($modifiedFiles as $file) {
             if(substr($file, -4) === '.php') {
                 $this->modifiedFiles[] = $file;
