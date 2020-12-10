@@ -27,7 +27,7 @@
 		}
 	],
 	"require": {
-		"php": ">=5.6.0",
+		"php": ">=7.3.0",
 		"klaussilveira/gitter": "dev-php-semver-checker",
 		"symfony/console": "^2.7|^3.0|^4.0",
 		"tomzx/finder": "^0.1",
@@ -53,7 +53,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "5.6.0"
+			"php": "7.3.0"
 		}
 	},
 	"extra": {
