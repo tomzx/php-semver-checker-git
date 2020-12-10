@@ -4,8 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/tomzx/php-semver-checker-git/v/stable.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
 [![Latest Unstable Version](https://poser.pugx.org/tomzx/php-semver-checker-git/v/unstable.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
 [![Build Status](https://img.shields.io/travis/tomzx/php-semver-checker-git.svg)](https://travis-ci.org/tomzx/php-semver-checker-git)
-[![Code Quality](https://img.shields.io/scrutinizer/g/tomzx/php-semver-checker-git.svg)](https://scrutinizer-ci.com/g/tomzx/php-semver-checker-git/code-structure)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/tomzx/php-semver-checker-git.svg)](https://scrutinizer-ci.com/g/tomzx/php-semver-checker-git)
+[![Code Coverage](https://img.shields.io/codecov/c/github/tomzx/php-semver-checker-git)](https://app.codecov.io/gh/tomzx/php-semver-checker-git/)
 [![Total Downloads](https://img.shields.io/packagist/dt/tomzx/php-semver-checker-git.svg)](https://packagist.org/packages/tomzx/php-semver-checker-git)
 
 PHP Semantic Versioning Checker for `git` is a console/library which allows you to inspect a set of before and after source code using GIT.
