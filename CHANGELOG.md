@@ -4,6 +4,20 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
+## <a name="v0.8.0"></a>v0.8.0 (2020-12-17)
+[Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.7.1...v0.8.0)
+### Added
+* Support for PHP 7.3, 7.4, 8.0
+
+### Changed
+* Refactor SuggestCommand [#27](https://github.com/tomzx/php-semver-checker-git/pull/27)
+* Replace travis-ci with GitHub actions
+* Update `php-semver-checker` to v0.14.0
+
+### Removed
+* Support for PHP 5.6, 7.0, 7.1 and 7.2
+* Use of scrutinizer-ci during CI
+
 ## <a name="v0.7.1"></a>v0.7.1 (2018-02-08)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.7.0...v0.7.1)
 ### Changed
