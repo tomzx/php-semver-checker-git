@@ -39,7 +39,7 @@ class SourceFileProcessor
     /**
      * @var string[]
      */
-    private $modifiedFiles;
+    private $modifiedFiles = [];
 
     /**
      * SourceFileProcessor constructor.
