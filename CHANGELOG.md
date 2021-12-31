@@ -4,6 +4,15 @@ This project follows [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## <a name="unreleased"></a>Unreleased
 
+## <a name="v0.8.1"></a>v0.8.1 (2021-12-30)
+[Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.8.0...v0.8.1)
+### Added
+* Support for PHP 8.1
+
+### Changed
+* Update `php-semver-checker` to v0.15.1
+* Update `klaussilveira/gitter` dependency
+
 ## <a name="v0.8.0"></a>v0.8.0 (2020-12-17)
 [Full Changelog](https://github.com/tomzx/php-semver-checker-git/compare/v0.7.1...v0.8.0)
 ### Added
