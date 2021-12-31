@@ -14,7 +14,7 @@
 		{
 			"name": "Tom Rochette",
 			"email": "tom@tomrochette.com",
-			"homepage": "http://www.tomrochette.com"
+			"homepage": "https://www.tomrochette.com"
 		}
 	],
 	"support": {
@@ -27,17 +27,15 @@
 		}
 	],
 	"require": {
-		"php": ">=7.3.0",
+		"php": ">=7.3",
 		"klaussilveira/gitter": "dev-php-semver-checker",
 		"symfony/console": "^4.4|^5.1",
-		"tomzx/finder": "^0.1",
-		"tomzx/php-semver-checker": "^0.14",
-		"vierbergenlars/php-semver": "^3.0.2",
-		"symfony/process": "^3.4"
+		"tomzx/php-semver-checker": "^0.15.1",
+		"vierbergenlars/php-semver": "^3.0.2"
 	},
 	"require-dev": {
-		"mockery/mockery": "^1.0",
-		"phpunit/phpunit": "^9.5"
+		"mockery/mockery": "^1.4.4",
+		"phpunit/phpunit": "^9.5.10"
 	},
 	"bin": [
 		"bin/php-semver-checker-git"
