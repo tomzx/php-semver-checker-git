@@ -75,28 +75,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomzx/gitter.git",
-                "reference": "da53511de140bacf97112900eaf22af2bceaeb6a"
+                "reference": "47ed3833f61c161cba86a38c555ac9cf52d96eab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomzx/gitter/zipball/da53511de140bacf97112900eaf22af2bceaeb6a",
-                "reference": "da53511de140bacf97112900eaf22af2bceaeb6a",
+                "url": "https://api.github.com/repos/tomzx/gitter/zipball/47ed3833f61c161cba86a38c555ac9cf52d96eab",
+                "reference": "47ed3833f61c161cba86a38c555ac9cf52d96eab",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
-                "symfony/process": ">=2.2"
+                "php": ">=7.3",
+                "symfony/process": "^4.2||^5.0"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0",
-                "symfony/filesystem": ">=2.2"
+                "mockery/mockery": "^1.4.4",
+                "phpunit/phpunit": "^9.5.10",
+                "symfony/filesystem": "^5.0"
             },
             "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Gitter\\": "lib/Gitter"
+                "psr-0": {
+                    "Gitter": "lib/"
                 }
             },
             "license": [
@@ -120,7 +120,7 @@
                 "source": "https://github.com/tomzx/gitter/tree/php-semver-checker",
                 "issues": "https://github.com/tomzx/gitter/issues"
             },
-            "time": "2015-06-28T00:49:30+00:00"
+            "time": "2021-12-31T04:07:01+00:00"
         },
         {
             "name": "nikic/php-parser",
