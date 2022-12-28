@@ -28,6 +28,8 @@ jobs:
 
     - name: Install dependencies
       uses: nick-invision/retry@v1
+      env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           timeout_minutes: 5
           max_attempts: 5
